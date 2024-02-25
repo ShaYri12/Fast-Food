@@ -1,5 +1,5 @@
 .filter-btn{
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 400;
     border: 2px solid var(--primary-color);
 }
@@ -30,3 +30,9 @@
     color: #fff !important;
 }
 
+
+@media screen and (max-width: 992px){
+    .filter-btn{
+        font-size: 1.2rem;
+    }
+}

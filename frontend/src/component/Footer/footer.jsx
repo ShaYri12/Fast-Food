@@ -1,21 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from "react-router-dom";
 import './footer.css';
+import { AuthContext } from '../../context/AuthContext'
 import logo from '../../assets/images/logo.png'
 
 const Footer = () => {
   const year = new Date().getFullYear();
+  const { user } = useContext(AuthContext);
 
   return (
     <>
       <div className='container newsletter rounded-3  align-items-center d-flex mt-5' style={{ marginTop: '-50px', position: 'relative', zIndex: '2' }}>
-        <div className='row align-items-center justify-content-between mx-md-auto mx-0'>
-          <div className='col-md-4 col-12 d-flex align-items-center'>
-            <h5 className=''>Subscribe <br/> To Our Newsletter</h5>
+        <div className='row d-flex align-items-center justify-content-between mx-md-auto mx-0'>
+          <div className='col-md-4 col-12 d-flex align-items-center news-letter-text '>
+            <h5 className=''>Subscribe <br className='d-md-block d-none'/> To Our Newsletter</h5>
           </div>
-          <div className='col-lg-5 col-md-8 col-12 pb-2 pb-md-0 '>
+          <div className='col-lg-5 col-md-8 col-12 pb-2 pb-lg-0 '>
             <div className='newsletter-input my-auto '>
-              <input type='email' placeholder='Enter your email'/>
+              <input type='email' placeholder='Your Email'/>
               <button className='btn newsletter-btn'>Subscribe</button>
             </div>
           </div>
@@ -56,7 +58,7 @@ const Footer = () => {
                             <p><Link to="/about" className="text-reset"><i className="ri-arrow-right-s-line"></i> About</Link></p>
                           </div>
                           <div className="col-md-6 explore-text">
-                            <p><a href="/my-order" className="text-reset"><i className="ri-arrow-right-s-line"></i> My Order</a></p>
+                            <p><a href={`/my-orders/${user?._id}`} className="text-reset"><i className="ri-arrow-right-s-line"></i> My Order</a></p>
                             <p><Link to="/login" className="text-reset"><i className="ri-arrow-right-s-line"></i> Login</Link></p>
                             <p><Link to="/register" className="text-reset"><i className="ri-arrow-right-s-line"></i> Register</Link></p>
                           </div>

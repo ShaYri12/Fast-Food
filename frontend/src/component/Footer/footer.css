@@ -2,10 +2,12 @@
     margin-top: 100px;
     margin-bottom: -50px;
     max-width: 60%;
-    height: 22vh;
+    height: 20vh;
     background-color: #fff;
     box-shadow: rgba(0,0,0,0.30) 0px 3px 7px 3px;
 }
+
+
 
 .newsletter-input{
     display:flex;
@@ -15,8 +17,12 @@
     padding: 0 0  0 0.5rem;
     margin-bottom: 2rem;
     border-radius: 5px;
+    border-top-right-radius: 10px; 
+    border-bottom-right-radius: 10px; 
     border:2px solid var(--primary-color);
 }
+
+
 
 .newsletter-input input{
     height: 40px;
@@ -101,4 +107,46 @@
 
 .contact-info p i, .text-reset i{
     font-size: 1.2rem;
+}
+
+@media screen and (max-width: 1117px){
+    .newsletter{
+        max-width: 70% !important;
+        height: 20vh;
+    }
+}
+@media screen and (max-width: 1019px){
+    .news-letter-text h5{
+        font-size: 1.1rem !important;
+    }
+    
+    .newsletter-input input{
+    height: 100%;
+    }
+
+    
+    
+}
+
+@media screen and (max-width: 768px){
+    .newsletter-btn{
+        font-size: 1.2rem !important;
+    }
+}
+
+@media screen and (max-width: 575px){
+    .newsletter-btn{
+        font-size: 1.1rem !important;
+    }
+}
+
+@media screen and (max-width: 413px){
+    .newsletter{
+        max-width: 80% !important;
+    }
+    .newsletter-btn{
+        font-size: 0.9rem !important;
+        min-width: 100px;
+    }
+    
 }

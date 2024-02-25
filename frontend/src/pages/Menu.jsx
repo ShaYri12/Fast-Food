@@ -51,11 +51,11 @@ const [searchTerm, setSearchTerm] = useState(queryParams.get('search') || '');
     <section>
       <div className='container'>
         <div className='row align-items-center'>
-        <div className='col-12 d-flex align-items-center justify-content-between gap-3 pb-5 pt-3 flex-wrap'>
+        <div className='col-12 d-flex align-items-center  justify-content-between gap-3 pb-5 pt-3 flex-wrap'>
             <div className='d-flex h-100'>
               <Search searchTerm={searchTerm} onSearch={setSearchTerm} />
             </div>
-            <div className='d-flex gap-3 align-items-center my-auto flex-wrap'>
+            <div className='d-flex gap-3 align-items-center justify-content-center my-auto flex-wrap'>
             <button className={`filter-btn btn btn-light ${filter === '' ? 'active' : ''}`} onClick={()=>{setFilter(''); }}>All</button>
             <button className={`filter-btn btn btn-light ${filter === 'Desi' ? 'active' : ''}`} onClick={()=>{setFilter('Desi'); setCurrentPage(1)}}>Desi</button>
             <button className={`filter-btn btn btn-light ${filter === 'Burger' ? 'active' : ''}`} onClick={()=>{setFilter('Burger'); setCurrentPage(1)}}>Burger</button>

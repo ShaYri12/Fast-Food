@@ -5,6 +5,10 @@ import '../styles/my-account.css'
 import '../styles/my-order.css'
 
 const MyOrders = () => {
+    useEffect(() => {
+      window.scrollTo(0, -1);
+    }, []);
+    
     const {id} = useParams();
   
     const fetchOrder = (url) => {

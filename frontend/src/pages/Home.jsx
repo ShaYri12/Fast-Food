@@ -23,7 +23,7 @@ const Home = () => {
   <div className='container'>
     <div className='row justify-content-center'>
       <div className='hero-text col-lg-5 col-md-6 col-12 pt-0 pt-lg-5 mt-2'>
-        <h1 className=''>Tasty Food<br /><span>Collections</span></h1>
+        <h1>Tasty Food<br /><span>Collections</span></h1>
         <p>
           Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
           Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies.

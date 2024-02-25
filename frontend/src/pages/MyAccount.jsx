@@ -9,6 +9,10 @@ import { Image, Transformation } from 'cloudinary-react';
 
 
 const MyAccount = () => {
+  useEffect(() => {
+    window.scrollTo(0, -1);
+  }, []);
+  
   const [editMode, setEditMode] = useState(false);
 
   const handleEditModeToggle = () => {

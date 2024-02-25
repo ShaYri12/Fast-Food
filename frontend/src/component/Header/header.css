@@ -31,7 +31,7 @@
 
 .profile .dropdown-menu .dropdown-item.active {
     background-color: var(--primary-color);
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
 .profileimg{
