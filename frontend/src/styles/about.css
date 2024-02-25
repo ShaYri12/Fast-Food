@@ -1,0 +1,33 @@
+.aboutus-text h1{
+    font-size: 120px;
+    font-weight: 600;
+}
+
+.aboutus-img {
+    max-height: 500px;
+}
+
+.aboutus-img .restaurent-img {
+    height: 100%;
+    width: 89%;
+    object-fit: cover;
+}
+
+.burger-img{
+    margin-top: -15%;
+    max-width: 40%;
+}
+
+.read-more-btn{
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--tertiary-color);
+    background-color: var(--primary-color);
+    padding: 10px 15px
+}
+
+.read-more-btn:hover,
+.read-more-btn:focus,
+.read-more-btn.active{
+    background-color: #6fff00;
+}
