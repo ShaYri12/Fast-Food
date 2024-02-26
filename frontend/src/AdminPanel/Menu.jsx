@@ -27,7 +27,7 @@ const Menu = () => {
         <h1 className='dashboard-heading'>Menu</h1>
         <div className='d-flex align-item-center justify-content-between pt-5 mt-3 mb-1'>
             <h5 className='dashboard-text'>All Foods</h5>
-            <Link className='add-tour-btn btn btn-light dashboard-text' to="/createfood"><i className="ri-file-add-line"></i> Create Food</Link>
+            <Link className='add-tour-btn btn btn-light' to="/createfood"><i className="ri-file-add-line"></i> Create Food</Link>
         </div>
         <div className='col-12 table-box '>
         <table className="table tours-table shadow">

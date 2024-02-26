@@ -95,6 +95,8 @@ th, td{
 
     .form-select{
         font-size: 70% !important;
+        height: 15px;
+        padding: 0 15px;
     }
 }
 
@@ -131,7 +133,6 @@ th, td{
         font-size: 10px !important;
         padding: 0 3px;
         height: 25px;
-        min-height: none;
     }
     
 }
@@ -182,5 +183,11 @@ th, td{
     .profileimg{
         width: 30px !important;
         height: 30px !important;
+    }
+
+    .add-tour-btn{
+        font-size: 10px !important;
+        
+        
     }
 }
