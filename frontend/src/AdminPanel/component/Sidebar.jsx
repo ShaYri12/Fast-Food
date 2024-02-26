@@ -82,14 +82,14 @@ const Sidebar = () => {
     <div className={`d-flex flex-column text-bg-dark align-items-between h-100 sidebar wrapper ${isCollapsed ? 'collapsed p-1' : 'p-3'}`}>
       <div className='navigation-section'>
       
-        <Link to="/" className={`navbar-brand logo d-flex   ${isCollapsed ? 'collapsed' : ''}`}>
+        <Link to="/" className={`navbar-brand logo d-flex   ${isCollapsed ? 'collapsed-sidebar' : ''}`}>
           <img className={`logo img-fluid rounded-2 ${isCollapsed ? 'd-none  ' : 'd-block'}`} src={weblogo} alt="" />
           <button className="btn text-white collapse-btn align-item-center justify-content-center ms-1 my-auto" onClick={handleToggleCollapse}>
             <i className={`ri-menu-${isCollapsed ? 'unfold' : 'fold'}-line`}></i>
           </button>
         </Link>
         <hr/>
-        <ul className={`nav nav-pills shadow flex-column mb-auto ${isCollapsed ? 'collapsed' : ''}`}>
+        <ul className={`nav nav-pills shadow flex-column mb-auto ${isCollapsed ? 'collapsed-sidebar' : ''}`}>
           <li className="nav-item admin-nav-items">
             <NavLink to="/dashboard" className="nav-link sidebar-link text-white" aria-current="page">
             <i className={`ri-dashboard-line ${isCollapsed ? '' : 'pe-2'}`}></i>
@@ -122,7 +122,7 @@ const Sidebar = () => {
           </li>
         </ul>
       </div>
-      <div className={`profile-section mt-auto ${isCollapsed ? 'collapsed' : ''}`}>
+      <div className={`profile-section mt-auto ${isCollapsed ? 'collapsed-sidebar' : ''}`}>
       <div className='w-100'>
         <hr/>
         <div className="dropdown">

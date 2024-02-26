@@ -14,7 +14,7 @@
     transition: all 0.4s ease-in-out;
   }
   
-  .collapsed {
+  .collapsed-sidebar {
     width: 67px; /* Set the desired collapsed width */
   }
 
@@ -117,7 +117,7 @@
         font-size: 25px !important;
     }
 
-    .collapsed {
+    .collapsed-sidebar {
         width: 40px; /* Set the desired collapsed width */
       }
 

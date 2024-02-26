@@ -26,7 +26,7 @@
 
 .profile .dropdown-menu .dropdown-item:focus{
     background-color: inherit;
-    color: var(--primary-color);
+    color: #fff;
 }
 
 .profile .dropdown-menu .dropdown-item.active {
