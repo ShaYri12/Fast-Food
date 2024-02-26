@@ -60,7 +60,7 @@ console.log(userOrders)
                 <thead>
                   <tr  className='text-center'>
                     <th scope="col" className='text-center'>#</th>
-                    <th scope="col">No. of Items</th>
+                    <th scope="col">Types of Items</th>
                     <th scope="col">Date & Time</th>
                     <th scope="col">Total Amout</th>
                     <th scope="col">Status</th>
@@ -97,11 +97,11 @@ console.log(userOrders)
                               {order.status === 'preparing' ? (
                                 <div className='status preparing rounded-2 mx-auto'>Preparing</div>
                               ) : order.status === 'delivered' ? (
-                                <div className='status delivered rounded-2'>Delivered</div>
+                                <div className='status delivered rounded-2 mx-auto'>Delivered</div>
                               ) : order.status === 'cancelled' ? (
-                                <div className='status cancelled rounded-2 '>Cancelled</div>
-                              ) : order.status === 'delivering ' ? (
-                                <div className='status delivering rounded-2'>Delivering</div>
+                                <div className='status cancelled rounded-2 mx-auto'>Cancelled</div>
+                              ) : order.status === 'delivering' ? (
+                                <div className='status delivering rounded-2 mx-auto'>Delivering</div>
                               ) : null}                            
                             </td>
                           </tr>

@@ -10,48 +10,23 @@ import Avatar from '../assets/images/avatar.jpg'
 import { toast } from 'react-toastify';
 
 const FoodDetaill = () => {
-    useEffect(() => {
-        window.scrollTo(0, -1);
-      });
-
-    const [quantity, setQuantity] = useState(1);
-
-  const handleQuantityChange = (action) => {
-    if (action === 'increase') {
-      setQuantity(quantity + 1);
-    } else if (action === 'decrease' && quantity > 1) {
-      setQuantity(quantity - 1);
-    }
-  };
-
-  const handleManualQuantityChange = (e) => {
-    const enteredValue = parseInt(e.target.value, 10);
-    if (!isNaN(enteredValue) && enteredValue > 0) {
-      setQuantity(enteredValue);
-    } else {
-      // If the entered value is not a positive number, reset to 1
-      setQuantity(1);
-    }
-  };
-
-  const {user} = useContext(AuthContext)
-  const [foodRating, setFoodRating]= useState(null)
-  const { id } = useParams();
-  const {data: food, loading, error} = useFetch(`${BASE_URL}/menus/${id}`)
-  if (!food) {
-    return <div>Item not found</div>;
-  }
-
-  const {photo, title, desc, price, reviews, category} = food;
-
-  const {totalRating, avgRating} = calculateAvgRating(reviews);
-  const deleveryCharges = 100;
-  const TotalAmount = (quantity * price) +deleveryCharges;
-  const reviewMsgRef = useRef('')
+  const { user } = useContext(AuthContext);
+  const [quantity, setQuantity] = useState(1);
   const Navigate = useNavigate();
+  const { id } = useParams();
+  const { data: food, loading, error } = useFetch(`${BASE_URL}/menus/${id}`);
+  const reviewMsgRef = useRef('');
+  const [foodRating, setFoodRating] = useState(null);
 
-  const options = {day: "numeric", month:'long', year:'numeric'}
-  
+  useEffect(() => {
+    window.scrollTo(0, -1);
+  }, []);
+
+  const { totalRating, avgRating } = calculateAvgRating(food?.reviews);
+  const deleveryCharges = 100;
+  const TotalAmount = quantity * food?.price + deleveryCharges;
+  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+
   const useFetch2 = (url) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
@@ -86,7 +61,35 @@ const FoodDetaill = () => {
 
   }
   
-  const { data: userinfo, loading: userLoading, error: userError } = useFetch2(user ? `${BASE_URL}/users/${user._id}` : null);
+  const { data: userinfo, loading: userLoading, error: userError } = useFetch2(
+    user ? `${BASE_URL}/users/${user._id}` : null
+  );
+
+  const handleQuantityChange = (action) => {
+    if (action === 'increase') {
+      setQuantity(quantity + 1);
+    } else if (action === 'decrease' && quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  const handleManualQuantityChange = (e) => {
+    const enteredValue = parseInt(e.target.value, 10);
+    if (!isNaN(enteredValue) && enteredValue > 0) {
+      setQuantity(enteredValue);
+    } else {
+      // If the entered value is not a positive number, reset to 1
+      setQuantity(1);
+    }
+  };
+
+  if (!food) {
+    return <div>Item not found</div>;
+  }
+
+  const {photo, title, desc, price, reviews, category} = food;
+  
+  
   
   const submitHandler = async e =>{
     e.preventDefault();
@@ -163,8 +166,6 @@ const FoodDetaill = () => {
       toast.error('An error occurred while processing your request');
     }
   };
-  
-  
 
   const handleOrder = async (e) => {
     e.preventDefault();

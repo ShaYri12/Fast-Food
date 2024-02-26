@@ -42,14 +42,15 @@ const Dashboard = () => {
 
   const { data: users, loading: loadingUsers, error: errorUsers } = useFetch(`${BASE_URL}/users`);
   const { data: admins, loading: loadingAdmins, error: errorAdmins } = useFetch(`${BASE_URL}/users/search/admins`);
-  const { data: orders, loading: loadingOrders, error: errorOrders } = useFetch(`${BASE_URL}/orders`);
-  const { data: foods, loading: loadingFoods, error: errorFoods } = useFetch(`${BASE_URL}/menus/search/getTourCount`);
+  const { data: orders, loading: loadingOrders, error: errorOrders } = useFetch(`${BASE_URL}/order`);
+  const { data: foods, loading: loadingFoods, error: errorFoods } = useFetch(`${BASE_URL}/menus/search/getMenuCount`);
+
 
   return (
-    <div className='dashboard container pt-4 mt-5'>
+    <div className='dashboard container pt-4'>
       <div className='row align-item-center justify-content-center'>
-        <h1>Dashboard</h1>
-        <h5 className='ps-3 pt-2'>General Report</h5>
+        <h1 className='dashboard-heading'>Dashboard</h1>
+        <h5 className='ps-3 pt-3 mt-5 dashboard-text'>General Report</h5>
         <Link to="/users" className='general-box mt-5 border border-2 align-items-center justify-content-center d-flex flex-column shadow-xl col-lg-3 col-md-4'>
           <h3>Users</h3>
           <h3 className='pt-3'>
@@ -64,7 +65,7 @@ const Dashboard = () => {
           }
           </h3>
         </Link>
-        <Link to="/all-bookings" className='general-box mt-5 border border-2 align-items-center justify-content-center d-flex flex-column shadow-xl col-lg-3 col-md-4'>
+        <Link to="/orders" className='general-box mt-5 border border-2 align-items-center justify-content-center d-flex flex-column shadow-xl col-lg-3 col-md-4'>
           <h3>Orders</h3>
           <h3 className='pt-3'>
           {
@@ -79,7 +80,7 @@ const Dashboard = () => {
           }
           </h3>
         </Link>
-        <Link to="/all-tours" className='general-box mt-5 border border-2 align-items-center justify-content-center d-flex flex-column shadow-xl col-lg-3 col-md-4'>
+        <Link to="/menu" className='general-box mt-5 border border-2 align-items-center justify-content-center d-flex flex-column shadow-xl col-lg-3 col-md-4'>
           <h3>Foods</h3>
           <h3 className='pt-3'>
           {

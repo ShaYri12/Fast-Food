@@ -21,9 +21,6 @@ const updateData = async (url, propertyName, propertyValue) => {
     }
 
     toast.success('Successfully Updated.');
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
   } catch (err) {
     toast.error('Error during updating.');
     console.error(err);

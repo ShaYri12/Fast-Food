@@ -5,6 +5,7 @@ import Avatar from '../../assets/images/avatar.jpg';
 import { toast } from 'react-toastify';
 import './sidebar.css';
 import { AuthContext } from '../../context/AuthContext';
+import { BASE_URL } from '../../utils/config';
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -69,6 +70,7 @@ const Sidebar = () => {
   }
 
   const { data: userinfo, loading, error } = useFetch(user ? `${BASE_URL}/users/${user._id}` : null);
+
   const logout = () =>{
     dispatch({type:'LOGOUT'})
     toast.success('Logout Successfully!')
@@ -76,8 +78,8 @@ const Sidebar = () => {
   }
   return (
     <>
-    <div className={`${isCollapsed ? ' d-block sidebar-collapse-behind-space' :'sidebar-behind-space d-block'}`}></div>
-    <div className={`d-flex flex-column  text-bg-dark align-item-between h-100 sidebar wrapper ${isCollapsed ? 'collapsed p-1' : 'p-3'}`}>
+    <div className={`${isCollapsed ? ' d-block sidebar-collapse-behind-space ' :' sidebar-behind-space d-block'}`}></div>
+    <div className={`d-flex flex-column text-bg-dark align-items-between h-100 sidebar wrapper ${isCollapsed ? 'collapsed p-1' : 'p-3'}`}>
       <div className='navigation-section'>
       
         <Link to="/" className={`navbar-brand logo d-flex   ${isCollapsed ? 'collapsed' : ''}`}>
@@ -89,31 +91,31 @@ const Sidebar = () => {
         <hr/>
         <ul className={`nav nav-pills shadow-lg flex-column mb-auto ${isCollapsed ? 'collapsed' : ''}`}>
           <li className="nav-item admin-nav-items">
-            <NavLink to="/dashboard" className="nav-link text-white" aria-current="page">
+            <NavLink to="/dashboard" className="nav-link sidebar-link text-white" aria-current="page">
             <i className={`ri-dashboard-line ${isCollapsed ? '' : 'pe-2'}`}></i>
               {isCollapsed ? '' : 'Dashboard'}
             </NavLink>
           </li>
           <li className="nav-item admin-nav-items">
-            <NavLink to="/all-tours" className="nav-link text-white">
-            <i className={`ri-flight-takeoff-line ${isCollapsed ? '' : 'pe-2'}`}></i>
-            {isCollapsed ? '' : 'Tours'}  
+            <NavLink to="/menu" className="nav-link sidebar-link text-white">
+            <i className={`ri-restaurant-line ${isCollapsed ? '' : 'pe-2'}`}></i>
+            {isCollapsed ? '' : 'Menu'}  
             </NavLink>
           </li>
           <li className="nav-item admin-nav-items">
-            <NavLink to="/all-bookings" className="nav-link text-white">
+            <NavLink to="/orders" className="nav-link sidebar-link text-white">
             <i className={`ri-calendar-2-fill ${isCollapsed ? '' : 'pe-2'}`}></i>
-              {isCollapsed ? '' : 'Bookings'}
+              {isCollapsed ? '' : 'Orders'}
             </NavLink>
           </li>
           <li className="nav-item admin-nav-items">
-            <NavLink to="/users" className="nav-link text-white">
+            <NavLink to="/users" className="nav-link sidebar-link text-white">
             <i className={`ri-group-line ${isCollapsed ? '' : 'pe-2'}`}></i>
             {isCollapsed ? '' : 'Users'}
             </NavLink>
           </li>
           <li className="nav-item admin-nav-items">
-            <NavLink to="/admins" className="nav-link text-white">
+            <NavLink to="/admins" className="nav-link sidebar-link text-white">
             <i className={`ri-admin-line ${isCollapsed ? '' : 'pe-2'}`}></i>
               {isCollapsed ? '' : 'Admins'}
             </NavLink>
@@ -124,12 +126,12 @@ const Sidebar = () => {
       <div className='w-100'>
         <hr/>
         <div className="dropdown">
-          <NavLink to="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src={userinfo.photo || Avatar} className='profileimg img-fluid rounded-circle border border-2' style={{width:'50px', height:'50px', objectFit:'cover'}} alt="profile-img"/>
-            <strong>{isCollapsed ? '' : userinfo.username}</strong>
+          <NavLink to="#" className={`d-flex align-items-center text-white text-decoration-none ${isCollapsed ? (''):('dropdown-toggle')} `} data-bs-toggle="dropdown" aria-expanded="false">
+            <img src={userinfo.photo || Avatar} className='profileimg img-fluid rounded-circle border border-2 me-2 ms-2' style={{width:'40px', height:'40px', objectFit:'cover'}} alt="profile-img"/>
+            <strong className='ms-1'>{isCollapsed ? '' : userinfo.username}</strong>
           </NavLink>
           <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
-            <li><Link className="dropdown-item" to={`/my-account/${user._id}`}>Profile</Link></li>
+            <li><NavLink className="dropdown-item" to={`/my-account/${user._id}`}>Profile</NavLink></li>
             <li><hr className="dropdown-divider"/></li>
             <li><Link className="dropdown-item" onClick={logout}>Sign out</Link></li>
           </ul>

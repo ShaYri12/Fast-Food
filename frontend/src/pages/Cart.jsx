@@ -112,14 +112,12 @@ const Cart = () => {
 
   const quantityChanges = () => {
     if (userCartTotal.length !== 0 && !totalLoading && !totalError) {
-      console.log('quantitychanged');
       // Calculate subtotal
       const calculatedSubtotal = userCartTotal.reduce(
         (sum, cartItem) => sum + cartItem.price * cartItem.quantity,
         0
       );
       setSubtotal(calculatedSubtotal);
-      console.log(subtotal);
   
       // Calculate total
       const calculatedTotal = calculatedSubtotal + deleverycharges;

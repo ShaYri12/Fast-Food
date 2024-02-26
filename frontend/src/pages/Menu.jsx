@@ -11,7 +11,7 @@ const Menu = () => {
   const location = useLocation(); 
   const queryParams = new URLSearchParams(location.search);
   const [filter, setFilter] = useState(queryParams.get('category') || '');
-const [searchTerm, setSearchTerm] = useState(queryParams.get('search') || '');
+  const [searchTerm, setSearchTerm] = useState(queryParams.get('search') || '');
 
   const { data: menuCount } = useFetch(
     `${BASE_URL}/menus/search/getmenuCount?category=${filter}&search=${searchTerm}`
@@ -19,6 +19,10 @@ const [searchTerm, setSearchTerm] = useState(queryParams.get('search') || '');
 
   const totalPages = Math.ceil(menuCount / 8);
   
+  useEffect(()=>{
+    window.scrollTo(0,-1)
+  })
+
   useEffect(() => {
     const scrollToTop = () => {
       const scrollStep = -window.scrollY;
@@ -41,9 +45,7 @@ const [searchTerm, setSearchTerm] = useState(queryParams.get('search') || '');
     `${BASE_URL}/menus?category=${filter}&search=${searchTerm}&page=${currentPage - 1}`
   );
 
-  useEffect(()=>{
-    window.scrollTo(0,-1)
-  })
+  
 
 
 

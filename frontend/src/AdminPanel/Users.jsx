@@ -1,70 +1,78 @@
 import React, { useEffect, useState } from 'react'
-import { BASE_URL } from '../../utils/config';
-import Avatar from '../../assets/images/avatar.jpg';
-import updateData from '../../hooks/useUpdate'
-import deleteData from '../../hooks/useDelete'
+import { BASE_URL } from '../utils/config';
+import Avatar from '../assets/images/avatar.jpg';
+import updateData from '../hooks/useUpdate'
+import deleteData from '../hooks/useDelete'
 
 const Users = () => {
-
   const useFetch = (url) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true);
+    const fetchData = async () => {
+      setLoading(true);
 
-        try {
-          const res = await fetch(url, {
-            method: "GET",
-            credentials:'include',
-          });
-          if (!res.ok) {
-            throw new Error(`Failed to fetch data from ${url}. Status: ${res.status} - ${res.statusText}`);
-          }
-          
-          const result = await res.json();
-          setData(result.data);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
+      try {
+        const res = await fetch(url, {
+          method: 'GET',
+          credentials: 'include',
+        });
+        if (!res.ok) {
+          throw new Error(`Failed to fetch data from ${url}. Status: ${res.status} - ${res.statusText}`);
         }
-      };
 
+        const result = await res.json();
+        setData(result.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    useEffect(() => {
       fetchData();
     }, [url]);
 
-    return { data, loading, error };
+    return { data, loading, error, fetchData };
+  };
 
-  }
+  const { data: users, loading, error, fetchData } = useFetch(`${BASE_URL}/users`);
 
-   const handleChangeRole = (userId, value)=>{
-     updateData(`${BASE_URL}/users/${userId}`,'role', value);
-   }
-   
-   const handleDelete = (userId)=>{
-    deleteData(`${BASE_URL}/users/${userId}`);
-   }
-   
-const {data: users, loading, error} = useFetch(`${BASE_URL}/users`);
+  const handleChangeRole = async (userId, value) => {
+    try {
+      await updateData(`${BASE_URL}/users/${userId}`, 'role', value);
+      fetchData(); // Call fetchData directly, no need to pass it as a parameter
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDelete = async (userId) => {
+    try {
+      await deleteData(`${BASE_URL}/users/${userId}`);
+      fetchData(); // Call fetchData directly, no need to pass it as a parameter
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
-    <div className='data-box container pt-4 mt-5'>
+    <div className='data-box container-fluid pt-4'>
       <div className='row align-item-center justify-content-center'>
-        <h1>Users</h1>
-        <h5 className='ps-3 pt-2'>All Users</h5>
+        <h1 className='dashboard-heading'>Users</h1>
+        <h5 className='pt-5 mt-3 dashboard-text'>All Users</h5>
         <div className='col-12 table-box'>
-        <table className="table tours-table shadow-lg">
+        <table className="table tours-table shadow">
           <thead>
             <tr>
               <th scope="col" className='text-center'>#</th>
               <th scope="col">Id</th>
-              <th scope="col">Profile Pic</th>
+              <th scope="col">Image</th>
               <th scope="col">Username</th>
               <th scope="col">Email</th>
-              <th scope="col">Bookings</th>
+              <th scope="col">Orders</th>
               <th scope="col">Role</th>
               <th scope="col" className='text-center'>Action</th>
             </tr>
@@ -87,7 +95,7 @@ const {data: users, loading, error} = useFetch(`${BASE_URL}/users`);
               <td>3</td>
               <td>
               <select
-                  className="form-select"
+                  className="form-select form-options"
                   value={user.role}
                   onChange={(e) => handleChangeRole(user._id, e.target.value)}
                 >

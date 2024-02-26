@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import './create-tour.css'
+import './create-food.css'
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { BASE_URL } from '../../../utils/config';
-import useFetch from '../../../hooks/useFetch';
+import { BASE_URL } from '../../utils/config';
+import useFetch from '../../hooks/useFetch';
 
-export const UpdateTour = () => {
+export const UpdateFood = () => {
   
 
   const {id} = useParams();

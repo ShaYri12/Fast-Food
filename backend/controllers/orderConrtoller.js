@@ -104,7 +104,7 @@ export const deleteOrder = async (req, res) => {
     }
   };
 
-  //get Order by status
+//get Order by status
 export const getAllOrder = async(req, res)=>{
   try {
     const status = req.query.status;
@@ -123,5 +123,27 @@ export const getAllOrder = async(req, res)=>{
       message: "Failed to fetch Orders",
       error: error.message,
     });
+  }
+};
+
+//Update payment of the order
+export const updatePayment = async(req, res)=>{
+  const id = req.params.id;
+  try{
+      const updatedUser = await Order.findByIdAndUpdate(id,{
+          $set: req.body
+      }, {new:true})
+
+      res.status(200).json({
+          success: true,
+          message: "Successfully updated",
+          data: updatedUser,
+      });
+  }
+  catch(err){
+      res.status(500).json({
+          success: false,
+          message: "Failed to update",
+      });
   }
 };

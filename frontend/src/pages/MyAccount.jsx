@@ -197,9 +197,9 @@ const MyAccount = () => {
   
  
   return (
-    <div className='container  my-5'>
+    <div className='container'>
       <div className='row justify-content-center d-flex align-items-center flex-column'>
-        <div className='col-6 align-items-center justify-content-center d-flex flex-column  profile text-center'>
+        <div className='col-7 align-items-center justify-content-center d-flex flex-column  profile text-center mt-5'>
         <img
           src={userData.photo || Avatar}
           alt="Profile"
@@ -228,7 +228,7 @@ const MyAccount = () => {
           </p>
           </div>
         </div>
-        <div className='col-md-6 col-12 mt-3'>
+        <div className='col-md-7 col-12 mt-3'>
           <div className='table-box border border-2 rounded-3 shadow p-3 mb-3'>
             <form className='account-setting mt-3' onSubmit={handleSaveProfile}>
                 <div className="input-group mb-3">

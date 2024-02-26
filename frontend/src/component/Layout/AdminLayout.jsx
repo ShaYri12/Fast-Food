@@ -1,12 +1,13 @@
 import React from 'react'
 import AdminRouters from '../../router/AdminRouters.jsx'
-// import Sidebar from '../../AdminPanel/component/Sidebar.jsx'
+import Sidebar from '../../AdminPanel/component/Sidebar.jsx'
 
 const AdminLayout = () => {
   return (
-    <div>
-        
-        <AdminRouters/>
+    <div className='d-flex'>
+      <Sidebar/>
+      <AdminRouters/>
+      <div className='end-point-space d-block' style={{width:"10px"}}></div>
     </div>
   )
 }

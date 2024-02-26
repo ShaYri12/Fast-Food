@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from './context/AuthContext.jsx';
-import ClientLayout from './component/Layout/ClientLayout.jsx';
 import './App.css'
-import AdminLayout from './component/Layout/AdminLayout.jsx';
 import { BASE_URL } from './utils/config.js';
+import AdminLayout from './component/Layout/AdminLayout.jsx';
+import ClientLayout from './component/Layout/ClientLayout.jsx';
+import ReactLoading from 'react-loading';
 
 function App() {
   const { user } = useContext(AuthContext)
@@ -41,16 +42,24 @@ function App() {
     return { data, loading, error };
 
   }
-  const {data: userData} = useFetch(`${BASE_URL}/users/${user?._id}`)
+  const {data: userData, loading, error} = useFetch(`${BASE_URL}/users/${user?._id}`)
   
   return (
+    loading ? (
+      <div className="container w-25 d-flex align-items-center min-vh-100 justify-content-center">
+        <ReactLoading type="spin" color="var(--primary-color)" height={'20%'} width={'20%'} />
+      </div>
+        ):(
     <div>
-    {userData?.role  == 'admin' ? (
+    
+    {!loading && !error &&
+      userData?.role  == 'admin' ? (
         <AdminLayout />
       ) : (
         <ClientLayout />
       )}
     </div>
+    )
   );
 }
 

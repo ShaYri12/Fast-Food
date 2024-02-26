@@ -1,67 +1,76 @@
 import React, { useEffect, useState } from 'react'
-import { BASE_URL } from '../../utils/config';
-import Avatar from '../../assets/images/avatar.jpg';
-import updateData from '../../hooks/useUpdate'
-import deleteData from '../../hooks/useDelete'
+import { BASE_URL } from '../utils/config';
+import Avatar from '../assets/images/avatar.jpg';
+import updateData from '../hooks/useUpdate'
+import deleteData from '../hooks/useDelete'
 
 const Admins = () => {
-  
   const useFetch = (url) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true);
+    const fetchData = async () => {
+      setLoading(true);
 
-        try {
-          const res = await fetch(url, {
-            method: "GET",
-            credentials:'include',
-          });
-          if (!res.ok) {
-            throw new Error(`Failed to fetch data from ${url}. Status: ${res.status} - ${res.statusText}`);
-          }
-          
-          const result = await res.json();
-          setData(result.data);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
+      try {
+        const res = await fetch(url, {
+          method: 'GET',
+          credentials: 'include',
+        });
+        if (!res.ok) {
+          throw new Error(`Failed to fetch data from ${url}. Status: ${res.status} - ${res.statusText}`);
         }
-      };
 
+        const result = await res.json();
+        setData(result.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    useEffect(() => {
       fetchData();
     }, [url]);
 
-    return { data, loading, error };
+    return { data, loading, error, fetchData };
+  };
 
-  }
+  const {data: admins, loading, error, fetchData} = useFetch(`${BASE_URL}/users/search/admins`);
 
-  const handleChangeRole = (adminId, value)=>{
-    updateData(`${BASE_URL}/users/${adminId}`,'role', value);
+
+  const handleChangeRole = async(adminId, value)=>{
+    try {
+      await updateData(`${BASE_URL}/users/${adminId}`, 'role', value);
+      fetchData();
+    } catch (err) {
+      console.error(err);
+    }
   }
   
-  const handleDelete = (adminId)=>{
-    deleteData(`${BASE_URL}/users/${adminId}`);
+  const handleDelete = async(adminId)=>{
+    try {
+      await deleteData(`${BASE_URL}/users/${adminId}`);
+      fetchData(); // Call fetchData directly, no need to pass it as a parameter
+    } catch (err) {
+      console.error(err);
+    }
   }
 
-  const {data: admins, loading, error} = useFetch(`${BASE_URL}/users/search/admins`);
-
   return (
-    <div className='data-box container pt-4 mt-5'>
+    <div className='data-box container-fluid pt-4 '>
       <div className='row align-item-center justify-content-center'>
-        <h1>Users</h1>
-        <h5 className='ps-3 pt-2'>All Users</h5>
+        <h1 className='dashboard-heading'>Admins</h1>
+        <h5 className='pt-5 mt-3 dashboard-text'>All Admins</h5>
         <div className='col-12 table-box'>
-        <table className="table tours-table shadow-lg">
+        <table className="table tours-table shadow">
           <thead>
             <tr>
               <th scope="col" className='text-center'>#</th>
               <th scope="col">Id</th>
-              <th scope="col">Profile Pic</th>
+              <th scope="col">Image</th>
               <th scope="col">Username</th>
               <th scope="col">Email</th>
               <th scope="col">Role</th>
@@ -85,7 +94,7 @@ const Admins = () => {
               <td>{admin.email}</td>
               <td>
               <select
-                  className="form-select"
+                  className="form-select form-options"
                   value={admin.role}
                   onChange={(e) => handleChangeRole(admin._id, e.target.value)}
                 >
