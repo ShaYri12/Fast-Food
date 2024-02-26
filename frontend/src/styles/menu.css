@@ -36,3 +36,12 @@
         font-size: 1.2rem;
     }
 }
+
+@media screen and (max-width: 768px){
+    .pagination button{
+        font-size: 11px;
+        padding:0;
+        width: 1.3rem;
+    height: 1.3rem;
+    }
+}

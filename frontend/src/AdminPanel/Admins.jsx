@@ -50,6 +50,7 @@ const Admins = () => {
     }
   }
   
+  
   const handleDelete = async(adminId)=>{
     try {
       await deleteData(`${BASE_URL}/users/${adminId}`);

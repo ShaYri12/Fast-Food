@@ -40,6 +40,45 @@ const Users = () => {
 
   const { data: users, loading, error, fetchData } = useFetch(`${BASE_URL}/users`);
 
+  const [usersWithOrderCounts, setUsersWithOrderCounts] = useState([]);
+
+  useEffect(() => {
+    const fetchUsersWithOrderCounts = async () => {
+      try {
+        const usersWithCounts = await Promise.all(users.map(async (user) => {
+          const count = await orderCount(user._id);
+          return { ...user, orderCount: count };
+        }));
+        setUsersWithOrderCounts(usersWithCounts);
+      } catch (err) {
+        console.error(`Failed to fetch order counts for users: ${err.message}`);
+      }
+    };
+
+    if (users.length > 0) {
+      fetchUsersWithOrderCounts();
+    }
+  }, [users]);
+
+  const orderCount = async (userId) => {
+    try {
+      const res = await fetch(`${BASE_URL}/order/${userId}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to fetch data. Status: ${res.status} - ${res.statusText}`);
+      }
+
+      const result = await res.json();
+      return result.data.length;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
   const handleChangeRole = async (userId, value) => {
     try {
       await updateData(`${BASE_URL}/users/${userId}`, 'role', value);
@@ -85,14 +124,14 @@ const Users = () => {
             error && <tr><td colSpan={7}>{error}</td></tr>
           }
           {!loading && !error &&
-              users?.map((user,index)=>(
+            usersWithOrderCounts?.map((user,index)=>(
             <tr key={user._id}>
               <th scope="row" className='text-center'>{index+1}</th>
               <td>{user._id}</td>
               <td><img src={user.photo || Avatar} className='profileimg img-fluid rounded-circle border border-2' style={{width:'60px', height:'60px' , objectFit:'cover'}} alt="profile-img"/></td>
               <td>{user.username}</td>
               <td>{user.email}</td>
-              <td>3</td>
+              <td>{user.orderCount}</td>
               <td>
               <select
                   className="form-select form-options"

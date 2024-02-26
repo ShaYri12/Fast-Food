@@ -89,7 +89,7 @@ const Sidebar = () => {
           </button>
         </Link>
         <hr/>
-        <ul className={`nav nav-pills shadow-lg flex-column mb-auto ${isCollapsed ? 'collapsed' : ''}`}>
+        <ul className={`nav nav-pills shadow flex-column mb-auto ${isCollapsed ? 'collapsed' : ''}`}>
           <li className="nav-item admin-nav-items">
             <NavLink to="/dashboard" className="nav-link sidebar-link text-white" aria-current="page">
             <i className={`ri-dashboard-line ${isCollapsed ? '' : 'pe-2'}`}></i>
