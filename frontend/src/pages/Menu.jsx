@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import Search from '../shared/Search';
 import { BASE_URL } from '../utils/config';
 import useFetch from '../hooks/useFetch';
+import Spinner from '../component/Spinner';
 
 const Menu = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -67,7 +68,7 @@ const Menu = () => {
             <button className={`filter-btn btn btn-light ${filter === 'Dessert' ? 'active' : ''}`} onClick={()=>{setFilter('Dessert'); setCurrentPage(1)}}>Dessert</button>
             </div>
         </div>
-        {loading && <h3>Loading.......</h3>}
+        {loading && <h3><Spinner/></h3>}
         {error && <h5>{error}</h5>}
         {!loading && !error &&
           foodData?.map(item=>(

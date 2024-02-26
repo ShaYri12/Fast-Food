@@ -5,6 +5,7 @@ import { BASE_URL } from '../utils/config';
 import calculateAvgRating from '../utils/avgRating';
 import deleteData from '../hooks/useDelete';
 import { Link } from 'react-router-dom';
+import Spinner from '../component/Spinner';
 
 
 const Menu = () => {
@@ -44,7 +45,7 @@ const Menu = () => {
           </thead>
           <tbody>  
           {
-            loading && <tr><td colSpan={7}>Loading.......</td></tr>
+            loading && <tr><td colSpan={7}><Spinner/></td></tr>
           }
           {
             error && <tr><td colSpan={7}>{error}</td></tr>

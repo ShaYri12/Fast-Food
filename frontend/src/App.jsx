@@ -4,7 +4,7 @@ import './App.css'
 import { BASE_URL } from './utils/config.js';
 import AdminLayout from './component/Layout/AdminLayout.jsx';
 import ClientLayout from './component/Layout/ClientLayout.jsx';
-import ReactLoading from 'react-loading';
+import Spinner from './component/Spinner.jsx';
 
 function App() {
   const { user } = useContext(AuthContext)
@@ -45,11 +45,7 @@ function App() {
   const {data: userData, loading, error} = useFetch(`${BASE_URL}/users/${user?._id}`)
   
   return (
-    loading ? (
-      <div className="container w-25 d-flex align-items-center min-vh-100 justify-content-center">
-        <ReactLoading type="spin" color="var(--primary-color)" height={'20%'} width={'20%'} />
-      </div>
-        ):(
+    loading ? (<Spinner/>):(
     <div>
     
     {!loading && !error &&
