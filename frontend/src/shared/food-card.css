@@ -38,6 +38,31 @@
     border-radius: 20px 0 0 0;
 }
 
+.food-img .cart-icon{
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: max-content;
+    height: max-content;
+    z-index: 10;
+    font-size:1.3rem;
+    background: var(--primary-color);
+    color:var(--tertiary-color);
+    padding: 0.3rem 0.6rem;
+    border-radius: 20px;
+    border: none;
+    box-shadow: rgba(17, 12, 46, 0.20) 0px 0px 40px 7px !important;
+}
+
+.food-img .cart-icon:hover{
+    color: var(--heading-color);
+}
+
+.food-img .cart-icon:focus{
+    background-color: #6fff00;
+    color: var(--heading-color);
+}
+
 .food-card .card-img-top{
     height: 200px;
     object-fit: cover;

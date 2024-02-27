@@ -89,9 +89,9 @@ const CartItem = ({cart, quantityChanges}) => {
             
       
 
-  const handleRemove = async(cartId) => {
+  const handleRemove = async(_id) => {
     try {
-      const response = await fetch(`${BASE_URL}/cart/${cartId}`, {
+      const response = await fetch(`${BASE_URL}/cart/${_id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -112,9 +112,6 @@ const CartItem = ({cart, quantityChanges}) => {
       console.log(err);
     }
   };
-
-  
-  
 
   return (
     <>

@@ -1,15 +1,59 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './food-card.css'
 import calculateAvgRating from '../utils/avgRating';
+import { AuthContext } from '../context/AuthContext';
+import { BASE_URL } from '../utils/config';
+import { toast } from 'react-toastify';
 
 export const FoodCard = ({item}) => {
     const {_id, title, photo, category, price, desc, reviews} = item;
     const {totalRating, avgRating} = calculateAvgRating(reviews);
+    const {user} = useContext(AuthContext)
+
+    const handleAddToCart = async (foodId) => {
+        try {
+          if (!user) {
+            return toast.error('Please Sign-In');
+          }
+      
+          const cartItem = {
+            userId: user._id,
+            foodId: foodId,
+            foodName: title,
+            quantity: 1,
+            price: price,
+            photo: photo,
+            category: category,
+          };
+          
+      
+          const response = await fetch(`${BASE_URL}/cart/addtocart`, {
+            method: 'post',
+            headers: {
+              'content-type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(cartItem),
+          });
+      
+          const result = await response.json();
+      
+          if (!response.ok) {
+            return toast.error(result.message || 'Failed to add item to the cart');
+          }
+      
+          toast.success('Item added in cart');
+        } catch (error) {
+          console.error(error);
+          toast.error('An error occurred while processing your request');
+        }
+      };
   
   return (
         <div className="card food-card shadow" key={_id}>
             <div className='food-img'>
+                <button className='cart-icon' onClick={() => handleAddToCart(_id)}><i className="ri-shopping-cart-fill"></i></button>
                 <img src={photo} className="card-img-top img-fluid" alt="CardImg"/>
                 <span> {category}</span>
             </div>
