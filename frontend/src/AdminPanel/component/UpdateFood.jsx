@@ -9,42 +9,37 @@ export const UpdateFood = () => {
   
 
   const {id} = useParams();
-  const{data: tour, loading, error}= useFetch(`${BASE_URL}/tours/${id}`)
+  const{data: food, loading, error}= useFetch(`${BASE_URL}/menus/${id}`)
+
   const navigate = useNavigate()
+console.log(food)
 
   useEffect(() => {
-    // Check if the tour data has been fetched
-    if (tour) {
-      setTourData({
-        title: tour.title || '',
-        city: tour.city || '',
-        desc: tour.desc || '',
-        address: tour.address || '',
-        price: tour.price || 0,
-        maxGroupSize: tour.maxGroupSize || 1,
-        photo: tour.photo || '',
-        distance: tour.distance || 0,
-        featured: tour.featured || false,
+    // Check if the food data has been fetched
+    if (food) {
+      setFoodData({
+        title: food.title || '',
+        city: food.category || '',
+        price: food.price || 0,
+        photo: food.photo || '',
+        desc: food.distance || 0,
+        special: food.special || false,
       });
     }
-  }, [tour]);
+  }, [food]);
 
-  const [tourData, setTourData] = useState({
-    title: tour.title ||'',
-    city: tour.city || '',
-    desc: tour.desc || '',
-    address: tour.address || '',
-    price: tour.price || 0,
-    maxGroupSize: tour.maxGroupSize || 1,
-    photo: tour.photo || '',
-    distance: tour.distance || 0,
-    featured: tour.featured || false
+  const [foodData, setFoodData] = useState({
+    title: food.title || '',
+    city: food.category || '',
+    price: food.price || 0,
+    photo: food.photo || '',
+    desc: food.distance || 0,
+    special: food.special || false,
   })
 
   
-console.log(tour.featured)
   const handleChange = e =>{
-    setTourData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setFoodData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
   const cloudinaryConfig = {
@@ -53,16 +48,16 @@ console.log(tour.featured)
     apiSecret: 'a60Y6vKeapSAgxHNtGpOsPhwNGY',
   };
 
-  const handleUpdateTour = async (e) => {
+  const handleUpdateFood = async (e) => {
     e.preventDefault();
-    if (!tourData.title || !tourData.city || !tourData.price || !tourData.address || !tourData.desc || !tourData.maxGroupSize || !tourData.distance || !tourData.photo) {
+    if (!foodData.title || !foodData.category || !foodData.price || !foodData.desc || !foodData.photo || !foodData.special) {
       toast.error("Please fill in all required fields.");
       return;
     }
     try {
-      if (tourData.photo) {
+      if (foodData.photo) {
         const formData = new FormData();
-        formData.append('file', tourData.photo);
+        formData.append('file', foodData.photo);
   
         const cloudinaryResponse = await fetch(
           `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/upload?upload_preset=qsimo6w7`,
@@ -73,16 +68,16 @@ console.log(tour.featured)
         );
   
         const cloudinaryData = await cloudinaryResponse.json();
-        tourData.photo = cloudinaryData.secure_url;
+        fooData.photo = cloudinaryData.secure_url;
       }
 
-      const response = await fetch(`${BASE_URL}/tours/${id}`, {
+      const response = await fetch(`${BASE_URL}/menus/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: 'include',
-        body: JSON.stringify(tourData),
+        body: JSON.stringify(foodData),
       });
   
       const { message } = await response.json();
@@ -92,10 +87,10 @@ console.log(tour.featured)
         return;
       }
   
-      toast.success("Successfully Updated The Tour.");
-      navigate('/all-tours')
+      toast.success("Successfully Updated The Food.");
+      navigate('/menu')
     } catch (err) {
-      toast.error("Error updating tour.");
+      toast.error("Error updating Food.");
       console.error(err);
     }
   };
@@ -107,49 +102,45 @@ console.log(tour.featured)
         <div className='row'>
           <div className='col-12 shadow-lg rounded-2'>
             <form>
-              <h1 className='text-center mb-5 mt-3'>Create A New Tour</h1>
-              <div className="input-fields input-group mb-3">
-                <span className="input-group-text">Tour Title:</span>
-                <input type="text" name="title" className="form-control" value={tourData.title} placeholder="Title of the tour" onChange={handleChange} />
-                <span className="input-group-text">City:</span>
-                <input type="text" name="city" className="form-control" value={tourData.city} placeholder="City of the tour" onChange={handleChange} />
+              <h1 className='text-center mb-5 mt-3'>Update The Food</h1>
+              <div className="input-fields input-group mb-3 d-flex flex-column flex-sm-row gap-3 gap-md-0">
+              <div className='d-flex  flex-grow-1'>
+                <span className="input-group-text">Food Title:</span>
+                <input type="text" name="title" className="form-control" placeholder="Title of the food" onChange={handleChange} />
+                </div>
+                <div className='d-flex flex-grow-1 '>
+                <span className="input-group-text">Category:</span>
+                <input type="text" name="category" className="form-control" placeholder="Category of the food" onChange={handleChange} />
+                </div>
               </div>
               <div className="input-fields input-group mb-3">
                 <span className="input-group-text">Price:</span>
-                <input type="number" name="price" className="form-control" value={tourData.price} placeholder="Price per person in dollar" onChange={handleChange} />
-                <span className="input-group-text">Max Peoples:</span>
-                <input type="number" name="maxGroupSize" className="form-control" value={tourData.maxGroupSize} placeholder="Maximum Peoples" onChange={handleChange} />
-              </div>
-              <div className="input-fields input-group mb-3">
-                <span className="input-group-text">Distance:</span>
-                <input type="number" name="distance" className="form-control" value={tourData.distance} placeholder="Distance in k/m" onChange={handleChange} />
-                <span className="input-group-text">Address:</span>
-                <input type="text" name="address" className="form-control" value={tourData.address} placeholder="Address of the tour" onChange={handleChange}/>
+                <input type="number" name="price" className="form-control" placeholder="Price of the food" onChange={handleChange} />
               </div>
               <div className="input-fields input-group mb-3">
                 <span className="input-group-text">Description:</span>
-                <textarea  rows="5" name="desc" className="form-control" value={tourData.desc} placeholder="Description of the tour" onChange={handleChange} />
+                <textarea  rows="5" name="desc" className="form-control" placeholder="Description of the food" onChange={handleChange} />
               </div>
               <div className="input-fields input-group mb-3">
-                <span className="input-group-text">Featured:</span>
-                <select name="featured" className='rounded-2'value={tourData.featured} onChange={handleChange} >
+                <span className="input-group-text">Special:</span>
+                <select name="special" className='rounded-2' onChange={handleChange} >
                   <option value="false">&nbsp;No&nbsp;</option>
                   <option value="true">&nbsp;Yes&nbsp;</option>
                 </select>
               </div>
               <div className="input-group mb-3">
-                  <label className="input-group-text" htmlFor="inputGroupFile01">Tour Picture</label>
+                  <label className="input-group-text" htmlFor="inputGroupFile01">Food Pic</label>
                   <input
                   type="file"
                   className="form-control"
                   name="photo"
-                  id="inputGroupFile01"
+                  id="inputGroupFile01 photo"
                   accept=".png, .jpg, .jpeg"
-                  onChange={(e) => setTourData({ ...tourData, photo: e.target.files[0] })}
+                  onChange={(e) => setFoodData({ ...foodData, photo: e.target.files[0] })}
                 />
               </div>
               <div className='justify-content-end d-flex'>
-                <button type="submit" onClick={handleUpdateTour} className='btn btn-light create-tour-btn mb-3'> <i className="ri-file-add-line"></i>   Update Tour</button>
+                <button type="submit" onClick={handleUpdateFood} className='btn btn-light create-tour-btn mb-3'> <i className="ri-file-add-line"></i>   Update Food</button>
               </div>
             </form>
           </div>

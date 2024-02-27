@@ -16,8 +16,8 @@ const AdminRouters = () => {
   const { user } = useContext(AuthContext);
   return (
     <Routes>
-        <Route path="/dashboard" element={<Dashboard />}/>
         <Route path="/" element={<Navigate to="/dashboard"/>}/>
+        <Route path="/dashboard" element={<Dashboard />}/>
         <Route path="/login" element={<Login />}/>
         <Route path="/menu" element={<Menu />}/>
         <Route path="/orders" element={<Orders />}/>

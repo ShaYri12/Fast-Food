@@ -7,8 +7,8 @@ import ClientLayout from './component/Layout/ClientLayout.jsx';
 import Spinner from './component/Spinner.jsx';
 
 function App() {
-  const { user } = useContext(AuthContext)
-  
+  const { user } = useContext(AuthContext);
+
   const useFetch = (url) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
@@ -21,12 +21,13 @@ function App() {
         try {
           const res = await fetch(url, {
             method: "GET",
-            credentials:'include',
+            credentials: 'include',
           });
+
           if (!res.ok) {
             throw new Error(`Failed to fetch data from ${url}. Status: ${res.status} - ${res.statusText}`);
           }
-          
+
           const result = await res.json();
           setData(result.data);
         } catch (err) {
@@ -40,21 +41,27 @@ function App() {
     }, [url]);
 
     return { data, loading, error };
+  };
 
-  }
-  const {data: userData, loading, error} = useFetch(`${BASE_URL}/users/${user?._id}`)
-  
+  // Provide a default value for user?._id to prevent undefined in the URL
+  const userId = user?._id || "";
+
+  const { data: userData, loading, error } = useFetch(`${BASE_URL}/users/${userId}`);
+
+  // Check if data has been fetched
+  const isDataFetched = !loading && !error;
+
   return (
-    loading ? (<Spinner/>):(
-    <div>
-    
-    {!loading && !error &&
-      userData?.role  == 'admin' ? (
-        <AdminLayout />
-      ) : (
-        <ClientLayout />
-      )}
-    </div>
+    isDataFetched ? (
+      <div>
+        {userData?.role === 'admin' ? (
+          <AdminLayout />
+        ) : (
+          <ClientLayout />
+        )}
+      </div>
+    ) : (
+      <Spinner />
     )
   );
 }

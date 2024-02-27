@@ -86,7 +86,7 @@ export const AllMenuData = ({item}) => {
   const {_id, title, category, photo, price, special, reviews,} = item;
   
   const handleDelete = (foodId) => {
-    deleteData(`${BASE_URL}/menus/${tourId}`);
+    deleteData(`${BASE_URL}/menus/${foodId}`);
   };
    
   const {totalRating, avgRating} = calculateAvgRating(reviews);

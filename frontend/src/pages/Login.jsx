@@ -49,7 +49,7 @@ const Login = () => {
         user: result.data,
       },})
       toast.success(result.message);
-      navigate("/");
+      navigate("/dashboard");
       
     }catch (error){
       dispatch({type:'LOGIN_FAILURE', payload:error.message}) 
