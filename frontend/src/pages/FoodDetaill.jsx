@@ -8,6 +8,7 @@ import { AuthContext } from '../context/AuthContext';
 
 import Avatar from '../assets/images/avatar.jpg'
 import { toast } from 'react-toastify';
+import Spinner from '../component/Spinner';
 
 const FoodDetaill = () => {
   const { user } = useContext(AuthContext);
@@ -86,7 +87,6 @@ const FoodDetaill = () => {
   if (!food) {
     return <div>Item not found</div>;
   }
-
   const {photo, title, desc, price, reviews, category} = food;
   
   
@@ -128,6 +128,7 @@ const FoodDetaill = () => {
     }
   }
 
+  
   const handleAddToCart = async () => {
     try {
       if (!userinfo) {
@@ -173,10 +174,12 @@ const FoodDetaill = () => {
     Navigate(`/cart/${userinfo._id}`);
   };
 
+  
+
   return (
     <section>
       <div className="container">
-      {loading && <h4 className='text-center pt-5'>Loading.......</h4>}
+      {loading && <Spinner/>}
           {error && <h4 className='text-center pt-5'>{error}</h4>}
           {
             !loading && !error &&

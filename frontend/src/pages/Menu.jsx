@@ -59,13 +59,13 @@ const Menu = () => {
               <Search searchTerm={searchTerm} onSearch={setSearchTerm} />
             </div>
             <div className='d-flex gap-3 align-items-center justify-content-center my-auto flex-wrap'>
-            <button className={`filter-btn btn btn-light ${filter === '' ? 'active' : ''}`} onClick={()=>{setFilter(''); }}>All</button>
-            <button className={`filter-btn btn btn-light ${filter === 'Desi' ? 'active' : ''}`} onClick={()=>{setFilter('Desi'); setCurrentPage(1)}}>Desi</button>
-            <button className={`filter-btn btn btn-light ${filter === 'Burger' ? 'active' : ''}`} onClick={()=>{setFilter('Burger'); setCurrentPage(1)}}>Burger</button>
-            <button className={`filter-btn btn btn-light ${filter === 'Pizza' ? 'active' : ''}`} onClick={()=>{setFilter('Pizza'); setCurrentPage(1)}}>Pizza</button>
-            <button className={`filter-btn btn btn-light ${filter === 'BBQ' ? 'active' : ''}`} onClick={()=>{setFilter('BBQ'); setCurrentPage(1)}}>BBQ</button>
-            <button className={`filter-btn btn btn-light ${filter === 'Chinese' ? 'active' : ''}`} onClick={()=>{setFilter('Chinese');  setCurrentPage(1)}}>Chinese</button>
-            <button className={`filter-btn btn btn-light ${filter === 'Dessert' ? 'active' : ''}`} onClick={()=>{setFilter('Dessert'); setCurrentPage(1)}}>Dessert</button>
+            <button className={`filter-btn1 btn btn-light ${filter === '' ? 'active' : ''}`} onClick={()=>{setFilter(''); }}>All</button>
+            <button className={`filter-btn1 btn btn-light ${filter === 'Desi' ? 'active' : ''}`} onClick={()=>{setFilter('Desi'); setCurrentPage(1)}}>Desi</button>
+            <button className={`filter-btn1 btn btn-light ${filter === 'Burger' ? 'active' : ''}`} onClick={()=>{setFilter('Burger'); setCurrentPage(1)}}>Burger</button>
+            <button className={`filter-btn1 btn btn-light ${filter === 'Pizza' ? 'active' : ''}`} onClick={()=>{setFilter('Pizza'); setCurrentPage(1)}}>Pizza</button>
+            <button className={`filter-btn1 btn btn-light ${filter === 'BBQ' ? 'active' : ''}`} onClick={()=>{setFilter('BBQ'); setCurrentPage(1)}}>BBQ</button>
+            <button className={`filter-btn1 btn btn-light ${filter === 'Chinese' ? 'active' : ''}`} onClick={()=>{setFilter('Chinese');  setCurrentPage(1)}}>Chinese</button>
+            <button className={`filter-btn1 btn btn-light ${filter === 'Dessert' ? 'active' : ''}`} onClick={()=>{setFilter('Dessert'); setCurrentPage(1)}}>Dessert</button>
             </div>
         </div>
         {loading && <h3><Spinner/></h3>}

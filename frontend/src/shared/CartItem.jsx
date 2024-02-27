@@ -103,9 +103,9 @@ const CartItem = ({cart, quantityChanges}) => {
         return;
       }
       toast.info('Removed the item from the cart.');
-      setTimeout(() => {
-        window.location.reload(); 
-      }, 1000);
+      setTimeout(()=>{ 
+        window.location.reload();
+    }, 1000);
 
     } catch (err) {
       toast.error('Error during deletion.');

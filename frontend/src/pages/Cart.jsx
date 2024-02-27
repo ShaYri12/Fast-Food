@@ -127,6 +127,7 @@ const Cart = () => {
       setUserCart([]);
     }
   };
+  
 
   useEffect(() => {
     // Trigger the refetch of userCart when quantity changes
