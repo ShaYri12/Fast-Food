@@ -14,7 +14,7 @@ dotenv.config();
 const app = express();
 const port = 8000
 const corsOption = {
-    origin: true,
+    origin: "https://fast-food-ljab.vercel.app",
     credentials: true,
 };
 
