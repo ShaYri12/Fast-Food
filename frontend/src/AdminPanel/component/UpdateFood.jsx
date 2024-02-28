@@ -6,8 +6,6 @@ import { BASE_URL } from '../../utils/config';
 import useFetch from '../../hooks/useFetch';
 
 const UpdateFood = () => {
-  
-
   const {id} = useParams();
   const{data: food, loading, error}= useFetch(`${BASE_URL}/menus/${id}`)
 
@@ -18,7 +16,7 @@ const UpdateFood = () => {
     if (food) {
       setFoodData({
         title: food.title || '',
-        city: food.category || '',
+        category: food.category || '',
         price: food.price || 0,
         photo: food.photo || '',
         desc: food.distance || 0,
@@ -29,7 +27,7 @@ const UpdateFood = () => {
 
   const [foodData, setFoodData] = useState({
     title: food.title || '',
-    city: food.category || '',
+    category: food.category || '',
     price: food.price || 0,
     photo: food.photo || '',
     desc: food.distance || 0,
