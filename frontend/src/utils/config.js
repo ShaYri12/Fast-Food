@@ -1,1 +1,1 @@
-export const BASE_URL = 'https://fast-food-ljab.vercel.app'
+export const BASE_URL = 'https://fast-food-ljab.vercel.app/api/'
