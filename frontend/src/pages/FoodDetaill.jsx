@@ -270,7 +270,7 @@ const FoodDetaill = () => {
             <div className='form-group-reviews'>
             {reviews?.map((review,index) =>(
                 <div className='review-item mt-4 d-flex ' key={index}>
-                  <img className="review-img img-fluid me-1 rounded-circle" src={userinfo.photo || Avatar} alt="" />
+                  <img className="review-img img-fluid me-1 rounded-circle" src={Avatar} alt="" />
                   <div className='w-100'>
                       <div className='d-flex align-items-center justify-content-between'>
                       <div className="align-items-center justify-content-center">
