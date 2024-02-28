@@ -79,7 +79,7 @@ const Sidebar = () => {
   return (
     <>
     <div className={`${isCollapsed ? ' d-block sidebar-collapse-behind-space ' :' sidebar-behind-space d-block'}`}></div>
-    <div className={`d-flex flex-column text-bg-dark align-items-between h-100 sidebar wrapper ${isCollapsed ? 'collapsed p-1' : 'p-3'}`}>
+    <div className={`d-flex flex-column text-bg-dark align-items-between h-100 sidebar wrapper ${isCollapsed ? 'collapsed-sidebar p-1' : 'p-3'}`}>
       <div className='navigation-section'>
       
         <Link to="/" className={`navbar-brand logo d-flex   ${isCollapsed ? 'collapsed-sidebar' : ''}`}>

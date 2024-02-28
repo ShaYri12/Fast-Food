@@ -5,14 +5,13 @@ import { toast } from 'react-toastify';
 import { BASE_URL } from '../../utils/config';
 import useFetch from '../../hooks/useFetch';
 
-export const UpdateFood = () => {
+const UpdateFood = () => {
   
 
   const {id} = useParams();
   const{data: food, loading, error}= useFetch(`${BASE_URL}/menus/${id}`)
 
   const navigate = useNavigate()
-console.log(food)
 
   useEffect(() => {
     // Check if the food data has been fetched
@@ -150,3 +149,5 @@ console.log(food)
     </>
   );
 };
+
+export default UpdateFood;

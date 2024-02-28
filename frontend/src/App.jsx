@@ -42,27 +42,25 @@ function App() {
 
     return { data, loading, error };
   };
-
-  // Provide a default value for user?._id to prevent undefined in the URL
+  
   const userId = user?._id || "";
 
   const { data: userData, loading, error } = useFetch(`${BASE_URL}/users/${userId}`);
 
-  // Check if data has been fetched
-  const isDataFetched = !loading && !error;
+  if(loading){
+      return <Spinner/>
+  }
+  
 
   return (
-    isDataFetched ? (
       <div>
-        {userData?.role === 'admin' ? (
+        {userData.role === 'admin' ? (
           <AdminLayout />
         ) : (
           <ClientLayout />
         )}
       </div>
-    ) : (
-      <Spinner />
-    )
+    
   );
 }
 

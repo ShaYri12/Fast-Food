@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../utils/config';
 
-export const CreateFood = () => {
+const CreateFood = () => {
   const [menuData, setMenuData] = useState({
     title: '',
     category: '',
@@ -131,3 +131,5 @@ export const CreateFood = () => {
     </>
   );
 };
+
+export default CreateFood

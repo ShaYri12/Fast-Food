@@ -32,7 +32,7 @@ const Routers = () => {
         <Route path="/thank-you" element={<ThankYou />}/>
         <Route path="/login" element={<Login />}/>
         <Route path="/register" element={<Register />}/>
-        
+
         { /* User Logged In? */ }
         {user ? (
           <Route path="/my-account/:id" element={<MyAccount />} />

@@ -40,13 +40,15 @@ const Login = () => {
       })
 
       const result = await res.json();
-      console.log(result.data)
       if(!res.ok){
         return toast.error(result.message)
       }
       dispatch({type:"LOGIN_SUCCESS",
       payload: {
-        user: result.data,
+        user: {
+          ...result.data,
+          role: result.role,
+        },
       },})
       toast.success(result.message);
       navigate("/dashboard");

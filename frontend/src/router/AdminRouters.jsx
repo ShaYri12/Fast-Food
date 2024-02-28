@@ -7,8 +7,8 @@ import Menu from '../AdminPanel/Menu.jsx'
 import Orders from '../AdminPanel/Orders.jsx'
 import Users from '../AdminPanel/Users.jsx'
 import Admins from '../AdminPanel/Admins.jsx'
-import { CreateFood } from '../AdminPanel/component/CreateFood.jsx';
-import { UpdateFood } from '../AdminPanel/component/UpdateFood.jsx'
+import CreateFood from '../AdminPanel/component/CreateFood.jsx';
+import UpdateFood from '../AdminPanel/component/UpdateFood.jsx'
 
 import Login from '../pages/Login.jsx';
 
