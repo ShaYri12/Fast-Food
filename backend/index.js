@@ -12,11 +12,22 @@ import cartRoute from './routes/cart.js'
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT ||  8000
-const corsOption = {
-    origin: 'https://fast-food-gamma.vercel.app/',
-    credentials: true,
-};
+const allowedOrigins = [
+    "https://fast-food-gamma.vercel.app/",
+    "https://fast-food-ljab.vercel.app/",
+    "http://localhost:5173",
+  ];
+  app.use(
+    cors({
+      origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
+    })
+  );
 
 //testing
 app.get('/',(req, res)=>{
@@ -36,7 +47,6 @@ const connect = async () => {
 
 //middleware
 app.use(express.json())
-app.use(cors(corsOption))
 app.use(cookieParser())
 
 //Routes
