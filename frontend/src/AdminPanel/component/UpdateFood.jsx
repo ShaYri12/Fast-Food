@@ -4,33 +4,35 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../utils/config';
 import useFetch from '../../hooks/useFetch';
+import Spinner from '../../component/Spinner';
 
 const UpdateFood = () => {
   const {id} = useParams();
   const{data: food, loading, error}= useFetch(`${BASE_URL}/menus/${id}`)
 
   const navigate = useNavigate()
+console.log(food)
 
-  useEffect(() => {
-    // Check if the food data has been fetched
-    if (food) {
-      setFoodData({
-        title: food.title || '',
-        category: food.category || '',
-        price: food.price || 0,
-        photo: food.photo || '',
-        desc: food.distance || 0,
-        special: food.special || false,
-      });
-    }
-  }, [food]);
+useEffect(() => {
+  // Check if the food data has been fetched
+  if (food) {
+    setFoodData({
+      title: food.title || '',
+      category: food.category || '',
+      price: food.price || 0,
+      photo: food.photo || '',
+      desc: food.desc || 0,
+      special: food.special || false,
+    });
+  }
+}, [food]);
 
   const [foodData, setFoodData] = useState({
     title: food.title || '',
     category: food.category || '',
     price: food.price || 0,
     photo: food.photo || '',
-    desc: food.distance || 0,
+    desc: food.desc || 0,
     special: food.special || false,
   })
 
@@ -65,7 +67,7 @@ const UpdateFood = () => {
         );
   
         const cloudinaryData = await cloudinaryResponse.json();
-        fooData.photo = cloudinaryData.secure_url;
+        foodData.photo = cloudinaryData.secure_url;
       }
 
       const response = await fetch(`${BASE_URL}/menus/${id}`, {
@@ -92,6 +94,9 @@ const UpdateFood = () => {
     }
   };
 
+  if(loading){
+    return <Spinner/>
+  }
   return (
     <>
     <div className='d-flex w-100 align-items-center justify-content-center vh-100'>
@@ -103,24 +108,24 @@ const UpdateFood = () => {
               <div className="input-fields input-group mb-3 d-flex flex-column flex-sm-row gap-3 gap-md-0">
               <div className='d-flex  flex-grow-1'>
                 <span className="input-group-text">Food Title:</span>
-                <input type="text" name="title" className="form-control" placeholder="Title of the food" onChange={handleChange} />
+                <input type="text" name="title" value={foodData.title} className="form-control" placeholder="Title of the food" onChange={handleChange} />
                 </div>
                 <div className='d-flex flex-grow-1 '>
                 <span className="input-group-text">Category:</span>
-                <input type="text" name="category" className="form-control" placeholder="Category of the food" onChange={handleChange} />
+                <input type="text" name="category" value={foodData.category} className="form-control" placeholder="Category of the food" onChange={handleChange} />
                 </div>
               </div>
               <div className="input-fields input-group mb-3">
                 <span className="input-group-text">Price:</span>
-                <input type="number" name="price" className="form-control" placeholder="Price of the food" onChange={handleChange} />
+                <input type="number" name="price" value={foodData.price} className="form-control" placeholder="Price of the food" onChange={handleChange} />
               </div>
               <div className="input-fields input-group mb-3">
                 <span className="input-group-text">Description:</span>
-                <textarea  rows="5" name="desc" className="form-control" placeholder="Description of the food" onChange={handleChange} />
+                <textarea  rows="5" name="desc" value={foodData.desc} className="form-control" placeholder="Description of the food" onChange={handleChange} />
               </div>
               <div className="input-fields input-group mb-3">
                 <span className="input-group-text">Special:</span>
-                <select name="special" className='rounded-2' onChange={handleChange} >
+                <select name="special" value={foodData.special} className='rounded-2' onChange={handleChange} >
                   <option value="false">&nbsp;No&nbsp;</option>
                   <option value="true">&nbsp;Yes&nbsp;</option>
                 </select>

@@ -1,45 +1,39 @@
 import React, { useState, useEffect } from 'react';
 
-const useFetch = (url, options = {}) => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+const useFetch = (url) => {
+    const [data, setData] = useState([]);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-        setLoading(true)
-        setError(null)
-      try {
-        const res = await fetch(url);
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
 
-        if (!res.ok) {
-          // Handle specific error cases
-          if (res.status === 404) {
-            throw new Error('Data not found');
-          }
+            try {
+                const res = await fetch(url);
+                
+                if (!res.ok) {
+                    throw new Error('Failed to fetch');
+                }
 
-          // Handle other error cases
-          throw new Error('Failed to fetch');
-        }
+                const result = await res.json();
+                setData(result.data);
+                setLoading(false)
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-        const result = await res.json();
+        fetchData();
+    }, [url]);
 
-        setData(result.data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+    return {
+        data,
+        error,
+        loading,
     };
-
-    fetchData();
-  }, [url]);
-
-  return {
-    data,
-    error,
-    loading,
-  };
 };
 
 export default useFetch;
