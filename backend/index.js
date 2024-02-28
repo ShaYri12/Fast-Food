@@ -14,8 +14,8 @@ dotenv.config();
 const app = express();
 const port = 8000
 const allowedOrigins = [
-    "https://fast-food-gamma.vercel.app",
-    "https://fast-food-ljab.vercel.app",
+    "https://fast-food-gamma.vercel.app/",
+    "https://fast-food-ljab.vercel.app/",
     "http://localhost:5173",
   ];
   app.use(
