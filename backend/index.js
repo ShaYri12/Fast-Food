@@ -13,8 +13,8 @@ import cartRoute from './routes/cart.js'
 dotenv.config();
 const app = express();
 const allowedOrigins = [
-    "https://fast-food-gamma.vercel.app/",
-    "https://fast-food-ljab.vercel.app/",
+    "https://fast-food-gamma.vercel.app",
+    "https://fast-food-ljab.vercel.app",
     "http://localhost:5173",
   ];
   app.use(
