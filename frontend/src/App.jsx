@@ -54,7 +54,7 @@ function App() {
 
   return (
       <div>
-        {userData.role === 'admin' ? (
+        {userData?.role === 'admin' ? (
           <AdminLayout />
         ) : (
           <ClientLayout />
