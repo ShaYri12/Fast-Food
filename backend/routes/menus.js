@@ -6,9 +6,6 @@ const router = express.Router();
 
 //create new Menu
 router.post("/", verifyAdmin, createMenu);
-router.get('/ululu', (req, res) => {
-    res.send('Menu route is working');
-});
 
 //update
 router.put("/:id", verifyAdmin, updateMenu);
