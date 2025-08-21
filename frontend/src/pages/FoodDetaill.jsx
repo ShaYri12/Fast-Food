@@ -103,6 +103,10 @@ const FoodDetaill = () => {
         return toast.error('Please Sign-In');
       }
   
+      console.log('=== Add to Cart Debug ===');
+      console.log('User info:', userinfo);
+      console.log('User ID from getUserId:', userId);
+      
       const cartItem = {
         userId: userId,
         foodId: id,
@@ -113,6 +117,8 @@ const FoodDetaill = () => {
         category: food && food.category,
       };
       
+      console.log('Cart item to send:', cartItem);
+      
       const result = await authenticatedFetch(`${BASE_URL}/cart/addtocart`, {
         method: 'POST',
         body: JSON.stringify(cartItem),
@@ -120,7 +126,7 @@ const FoodDetaill = () => {
   
       toast.success('Item added in cart');
     } catch (error) {
-      console.error(error);
+      console.error('Add to cart error:', error);
       toast.error(error.message || 'An error occurred while processing your request');
     }
   };

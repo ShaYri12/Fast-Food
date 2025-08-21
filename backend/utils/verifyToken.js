@@ -46,6 +46,28 @@ export const verifyUser = (req, res, next) =>{
     })
 }
 
+export const verifyCartUser = (req, res, next) =>{
+    verifyToken(req, res, () => {
+        // For cart operations, check user ID from body or params
+        const userIdToCheck = req.body.userId || req.params.id;
+        console.log('=== Cart User Verification ===');
+        console.log('Token user ID:', req.user.id);
+        console.log('Request user ID:', userIdToCheck);
+        console.log('User role:', req.user.role);
+        console.log('Match:', req.user.id == userIdToCheck);
+        
+        if(req.user.id == userIdToCheck || req.user.role == 'admin'){
+            console.log('Cart user verification: PASSED');
+            next();
+        }else{
+            console.log('Cart user verification: FAILED');
+            return res.status(401).json({
+                success: false,
+                message: "You're not authenticated"
+            })
+        }
+    })
+}
 
 export const verifyAdmin = (req, res, next) =>{
     verifyToken(req, res, () => {

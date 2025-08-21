@@ -53,6 +53,7 @@ const Login = () => {
       };
       
       console.log('User data to store:', userData);
+      console.log('User ID field:', userData._id);
       
       dispatch({type:"LOGIN_SUCCESS",
       payload: {
