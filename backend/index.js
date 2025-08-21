@@ -14,8 +14,12 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT ||  8000
 const corsOption = {
-    origin: true,
+    origin: process.env.NODE_ENV === 'production' 
+        ? ['https://fast-food-gamma.vercel.app', 'https://fast-food-server-nine.vercel.app'] 
+        : ['http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:5173'],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
 };
 
 //testing
@@ -47,6 +51,23 @@ app.use('/api/review', reviewRoute)
 app.use('/api/order', orderRoute)
 app.use('/api/cart', cartRoute)
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({
+        success: false,
+        message: 'Something went wrong!',
+        error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+    });
+});
+
+// Handle 404 routes
+app.use('*', (req, res) => {
+    res.status(404).json({
+        success: false,
+        message: 'Route not found'
+    });
+});
 
 app.listen(port,()=>{
     connect();
