@@ -1,8 +1,8 @@
 import express from "express"
 import dotenv from "dotenv"
-import mongoose from "mongoose"
 import cors from 'cors'
 import cookieParser from "cookie-parser"
+import { connectDB } from './utils/database.js'
 import menuRoute from './routes/menus.js'
 import userRoute from './routes/users.js'
 import authRoute from './routes/auth.js'
@@ -12,7 +12,7 @@ import cartRoute from './routes/cart.js'
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT ||  8000
+const port = process.env.PORT || 8000
 const corsOption = {
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
@@ -56,25 +56,42 @@ const corsOption = {
 };
 
 //testing
-app.get('/',(req, res)=>{
-    res.send("api is working");
-})
-
-mongoose.set("strictQuery", false);
-const connect = async () => {
+app.get('/', async (req, res) => {
     try {
-        await mongoose.connect(process.env.MONGO_URI);
-        console.log("MongoDB database connected");
-    } catch (err) {
-        console.log("MongoDB database connection failed", err);
+        await connectDB();
+        res.json({ 
+            success: true, 
+            message: "API is working",
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            success: false, 
+            message: "Database connection failed",
+            error: error.message 
+        });
     }
-};
-
+})
 
 //middleware
 app.use(express.json({ limit: "3mb" }));
 app.use(cors(corsOption))
 app.use(cookieParser())
+
+// Database connection middleware for all API routes
+app.use('/api', async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (error) {
+        console.error('Database connection error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Database connection failed',
+            error: error.message
+        });
+    }
+});
 
 //Routes
 app.use('/api/auth', authRoute)
@@ -102,7 +119,18 @@ app.use('*', (req, res) => {
     });
 });
 
-app.listen(port,()=>{
-    connect();
-    console.log(`server listening on port: ${port}`);
-})
+// For serverless deployment (Vercel), we don't need app.listen
+// For local development, we can still use it
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, async () => {
+        try {
+            await connectDB();
+            console.log(`Server listening on port: ${port}`);
+        } catch (error) {
+            console.error('Failed to start server:', error);
+        }
+    });
+}
+
+// Export the app for serverless deployment
+export default app;

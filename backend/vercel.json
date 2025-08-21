@@ -5,9 +5,7 @@
         "src": "index.js",
         "use": "@vercel/node",
         "config": {
-          "maxLambdaSize": "50mb",
-          "memory": 1024,
-          "timeout": 30
+          "maxLambdaSize": "50mb"
         }
       }
     ],
@@ -16,6 +14,9 @@
         "src": "/(.*)",
         "dest": "/index.js"
       }
-    ]
+    ],
+    "env": {
+      "NODE_ENV": "production"
+    }
   }
   

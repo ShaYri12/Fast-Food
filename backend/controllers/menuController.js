@@ -1,4 +1,5 @@
 import Menu from '../models/Menu.js'
+import { connectDB } from '../utils/database.js'
 
 //create new Menu
 export const createMenu = async (req, res) =>{
