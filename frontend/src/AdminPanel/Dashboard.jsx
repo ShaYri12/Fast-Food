@@ -9,15 +9,10 @@ const Dashboard = () => {
   const { user } = useContext(AuthContext);
   
 
-  // Test admin authentication first
-  const { data: authTest, loading: loadingAuth, error: errorAuth } = useFetch(`${BASE_URL}/test-admin`);
-  
   const { data: users, loading: loadingUsers, error: errorUsers } = useFetch(`${BASE_URL}/users`);
   const { data: admins, loading: loadingAdmins, error: errorAdmins } = useFetch(`${BASE_URL}/users/search/admins`);
   const { data: orders, loading: loadingOrders, error: errorOrders } = useFetch(`${BASE_URL}/order`);
   const { data: foods, loading: loadingFoods, error: errorFoods } = useFetch(`${BASE_URL}/menus/search/getMenuCount`);
-
-  console.log('Auth test result:', authTest, errorAuth);
 
 
   return (

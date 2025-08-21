@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { BASE_URL } from '../utils/config';
 import '../styles/cart.css'
 import CartItem from '../shared/CartItem';
+import { useFetch as useAuthenticatedFetch, authenticatedFetch } from '../utils/api';
 
 import mastercard from '/images/mastercard.png'
 import paypal from '/images/paypal.png'
@@ -53,50 +54,9 @@ const Cart = () => {
     return { data, loading, error };
   };
 
-  // Initial loading of userCart data
-  const { data: userCart, loading: cartLoading, error: cartError } = useInitialFetch(
-    `${BASE_URL}/cart/${id}`
-  );
-
-  const useFetch2 = (url) => {
-    const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
-  
-    const fetchData = async () => {
-      setLoading(true);
-  
-      try {
-        const res = await fetch(url, {
-          method: 'GET',
-          credentials: 'include',
-        });
-  
-        if (!res.ok) {
-          throw new Error(`Failed to fetch data from ${url}. Status: ${res.status} - ${res.statusText}`);
-        }
-  
-        const result = await res.json();
-        setData(result.data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    useEffect(() => {
-      fetchData();
-    }, [url]); // Only fetch when the URL changes
-  
-    return { data, loading, error, setData: fetchData };
-  };
-  
-  
-
-  const { data: userCartTotal, loading: totalLoading, error: totalError, setData: setUserCart } = useFetch2(
-    `${BASE_URL}/cart/${id}`
-  );
+  // Use authenticated fetch for cart data
+  const { data: userCart, loading: cartLoading, error: cartError } = useAuthenticatedFetch(`${BASE_URL}/cart/${id}`);
+  const { data: userCartTotal, loading: totalLoading, error: totalError } = useAuthenticatedFetch(`${BASE_URL}/cart/${id}`);
 
   
   const [subtotal, setSubtotal] = useState(0);
@@ -165,32 +125,21 @@ const Cart = () => {
     const totalAmount = total;
   
     try {
-      const response = await fetch(`${BASE_URL}/order`, {
+      const orderResult = await authenticatedFetch(`${BASE_URL}/order`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
         body: JSON.stringify({ userId, items, address, totalAmount }),
       });
 
-      if(!response.ok){
-        toast.error('Server Response is not ok')
-      }else{
-      const data = await response.json();
-      console.log(data)
+      console.log(orderResult);
 
-      const res = await fetch(`${BASE_URL}/cart/${id}`,{
+      const cartResult = await authenticatedFetch(`${BASE_URL}/cart/${id}`, {
         method: 'DELETE',
-        credentials: 'include',
-      })
-      if(!res.ok){
-        toast.error('Failed to remove cart items after order')
-      }
-        Navigate('/thank-you')
-      }
+      });
+
+      Navigate('/thank-you');
     } catch (error) {
       console.error('Error creating order:', error);
+      toast.error(error.message || 'Failed to create order');
     }
   }
     

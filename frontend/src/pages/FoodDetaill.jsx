@@ -5,6 +5,8 @@ import calculateAvgRating from '../utils/avgRating';
 import useFetch from '../hooks/useFetch';
 import { BASE_URL } from '../utils/config';
 import { AuthContext } from '../context/AuthContext';
+import { useFetch as useAuthenticatedFetch, authenticatedFetch } from '../utils/api';
+import { getUserId } from '../utils/getUserId';
 
 import Avatar from '/images/avatar.jpg'
 import { toast } from 'react-toastify';
@@ -28,43 +30,9 @@ const FoodDetaill = () => {
   const TotalAmount = quantity * food?.price + deleveryCharges;
   const options = { day: 'numeric', month: 'long', year: 'numeric' };
 
-  const useFetch2 = (url) => {
-    const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true);
-
-        try {
-          const res = await fetch(url, {
-            method: "GET",
-            credentials:'include',
-          });
-          if (!res.ok) {
-            throw new Error(`Failed to fetch data from ${url}. Status: ${res.status} - ${res.statusText}`);
-          }
-          
-          const result = await res.json();
-          setData(result.data);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchData();
-    }, [url]);
-
-    return { data, loading, error };
-
-  }
-  
-  const { data: userinfo, loading: userLoading, error: userError } = useFetch2(
-    user ? `${BASE_URL}/users/${user._id}` : null
-  );
+  // Use user data directly from context instead of making API call
+  const userinfo = user;
+  const userId = getUserId(user);
 
   const handleQuantityChange = (action) => {
     if (action === 'increase') {
@@ -136,7 +104,7 @@ const FoodDetaill = () => {
       }
   
       const cartItem = {
-        userId: userinfo._id,
+        userId: userId,
         foodId: id,
         foodName: food && food.title,
         quantity: quantity,
@@ -145,33 +113,22 @@ const FoodDetaill = () => {
         category: food && food.category,
       };
       
-  
-      const response = await fetch(`${BASE_URL}/cart/addtocart`, {
-        method: 'post',
-        headers: {
-          'content-type': 'application/json',
-        },
-        credentials: 'include',
+      const result = await authenticatedFetch(`${BASE_URL}/cart/addtocart`, {
+        method: 'POST',
         body: JSON.stringify(cartItem),
       });
-  
-      const result = await response.json();
-  
-      if (!response.ok) {
-        return toast.error(result.message || 'Failed to add item to the cart');
-      }
   
       toast.success('Item added in cart');
     } catch (error) {
       console.error(error);
-      toast.error('An error occurred while processing your request');
+      toast.error(error.message || 'An error occurred while processing your request');
     }
   };
 
   const handleOrder = async (e) => {
     e.preventDefault();
     await handleAddToCart();
-    Navigate(`/cart/${userinfo._id}`);
+    Navigate(`/cart/${userId}`);
   };
 
   

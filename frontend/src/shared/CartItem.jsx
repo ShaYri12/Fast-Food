@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { BASE_URL } from '../utils/config';
 import { toast } from 'react-toastify';
+import { authenticatedFetch } from '../utils/api';
 
 const CartItem = ({cart, quantityChanges}) => {
 
@@ -26,23 +27,13 @@ const CartItem = ({cart, quantityChanges}) => {
           quantity: updatedQuantity,
         };
   
-        const response = await fetch(`${BASE_URL}/cart/quantity`, {
+        const result = await authenticatedFetch(`${BASE_URL}/cart/quantity`, {
           method: 'PUT',
-          headers: {
-            'content-type': 'application/json',
-          },
-          credentials: 'include',
           body: JSON.stringify(cartItem),
         });
-  
-        const result = await response.json();
-  
-        if (!response.ok) {
-          toast.error(result.message || 'Failed to update item quantity');
-        } else {
-          setNewQuantity(updatedQuantity);
-          quantityChanges();
-        }
+
+        setNewQuantity(updatedQuantity);
+        quantityChanges();
       } catch (err) {
         toast.error('Error during updating the quantity');
         console.log(err);
@@ -61,20 +52,11 @@ const CartItem = ({cart, quantityChanges}) => {
               quantity: enteredValue,
             };
       
-            const response = await fetch(`${BASE_URL}/cart/quantity`, {
+            const result = await authenticatedFetch(`${BASE_URL}/cart/quantity`, {
               method: 'PUT',
-              headers: {
-                'content-type': 'application/json',
-              },
-              credentials: 'include',
               body: JSON.stringify(cartItem),
             });
-      
-            const result = await response.json();
-      
-            if (!response.ok) {
-              return toast.error(result.message || 'Failed to add item to the cart');
-            }
+            
             quantityChanges();
           } else {
             // If the entered value is not a positive number, reset to 1
@@ -91,21 +73,14 @@ const CartItem = ({cart, quantityChanges}) => {
 
   const handleRemove = async(_id) => {
     try {
-      const response = await fetch(`${BASE_URL}/cart/${_id}`, {
+      const result = await authenticatedFetch(`${BASE_URL}/cart/${_id}`, {
         method: 'DELETE',
-        credentials: 'include',
       });
 
-      const { message } = await response.json();      
-      
-      if (!response.ok) {
-        toast.error(message);
-        return;
-      }
       toast.info('Removed the item from the cart.');
       setTimeout(()=>{ 
         window.location.reload();
-    }, 1000);
+      }, 1000);
 
     } catch (err) {
       toast.error('Error during deletion.');

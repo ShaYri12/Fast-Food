@@ -7,6 +7,7 @@ import { AuthContext } from '../../context/AuthContext'
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../utils/config'
 import { useFetch } from '../../utils/api'
+import { getUserId, hasValidUserId } from '../../utils/getUserId'
 
 const Header = () => {
   useEffect(() => {
@@ -56,12 +57,20 @@ const Header = () => {
 
   const { user, dispatch } = useContext(AuthContext);
   
+  console.log('Header - User from context:', user);
+  
   // Don't show header for admin users
   if (user?.role === 'admin') {
     return null;
   }
   
-  const { data: userinfo, loading, error } = useFetch(user ? `${BASE_URL}/users/${user._id}` : null);
+  // Use the user data directly from context instead of making another API call
+  // The user object should already have all the necessary information
+  const userinfo = user;
+  const userId = getUserId(user);
+  
+  console.log('User ID:', userId);
+  console.log('Has valid user ID:', hasValidUserId(user));
   
   
 
@@ -101,15 +110,15 @@ const Header = () => {
         {user?(
           <>
           <div className='cart d-flex align-items-center justify-content-center'>
-            <NavLink className='btn cart-btn' to={`/cart/${userinfo._id}`}><i className="ri-shopping-cart-fill"></i></NavLink>
+            <NavLink className='btn cart-btn' to={`/cart/${userId}`}><i className="ri-shopping-cart-fill"></i></NavLink>
           </div>
           <div className="profile dropdown align-items-center d-flex flex-column justify-content-center">
             <button className="nav-link dropdown-toggle d-flex flex-column flex-md-row  align-items-center" to="/" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
-              <img src={userinfo.photo || Avatar} className='profileimg img-fluid rounded-circle border' alt=""/>  
+              <img src={userinfo?.photo || Avatar} className='profileimg img-fluid rounded-circle border' alt=""/>  
             </button>
             <ul className="dropdown-menu text-center">
-              <li><NavLink className="dropdown-item" to={`/my-orders/${userinfo._id}`}>My Orders</NavLink></li>
-              <li><NavLink className="dropdown-item" to={`/my-account/${userinfo._id}`}>Profile</NavLink></li>
+              <li><NavLink className="dropdown-item" to={`/my-orders/${userId}`}>My Orders</NavLink></li>
+              <li><NavLink className="dropdown-item" to={`/my-account/${userId}`}>Profile</NavLink></li>
               <li>
                 <hr className="dropdown-divider"/>
               </li>

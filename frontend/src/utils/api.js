@@ -24,9 +24,6 @@ export const authenticatedFetch = async (url, options = {}) => {
     ...options,
   };
   
-  console.log('Making authenticated request to:', url);
-  console.log('With headers:', config.headers);
-  
   const response = await fetch(url, config);
   
   if (!response.ok) {

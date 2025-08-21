@@ -5,6 +5,8 @@ import calculateAvgRating from '../utils/avgRating';
 import { AuthContext } from '../context/AuthContext';
 import { BASE_URL } from '../utils/config';
 import { toast } from 'react-toastify';
+import { authenticatedFetch } from '../utils/api';
+import { getUserId } from '../utils/getUserId';
 
 export const FoodCard = ({item}) => {
     const {_id, title, photo, category, price, desc, reviews} = item;
@@ -17,8 +19,9 @@ export const FoodCard = ({item}) => {
             return toast.error('Please Sign-In');
           }
       
+          const userId = getUserId(user);
           const cartItem = {
-            userId: user._id,
+            userId: userId,
             foodId: foodId,
             foodName: title,
             quantity: 1,
@@ -27,26 +30,15 @@ export const FoodCard = ({item}) => {
             category: category,
           };
           
-      
-          const response = await fetch(`${BASE_URL}/cart/addtocart`, {
-            method: 'post',
-            headers: {
-              'content-type': 'application/json',
-            },
-            credentials: 'include',
+          const result = await authenticatedFetch(`${BASE_URL}/cart/addtocart`, {
+            method: 'POST',
             body: JSON.stringify(cartItem),
           });
-      
-          const result = await response.json();
-      
-          if (!response.ok) {
-            return toast.error(result.message || 'Failed to add item to the cart');
-          }
       
           toast.success('Item added in cart');
         } catch (error) {
           console.error(error);
-          toast.error('An error occurred while processing your request');
+          toast.error(error.message || 'An error occurred while processing your request');
         }
       };
   

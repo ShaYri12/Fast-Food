@@ -52,7 +52,7 @@ export const login = async (req, res) =>{
                 message:'Incorrect email or password'
             })
         }
-        const {password, role, ...rest} = user._doc;
+        const {password, ...rest} = user._doc;
 
         //create jwt token
         const token = jwt.sign(
@@ -75,7 +75,7 @@ export const login = async (req, res) =>{
             message: "Successfully logged in",
             token,
             data: {...rest},
-            role,
+            role: user.role,
         });
 
     }catch(err){

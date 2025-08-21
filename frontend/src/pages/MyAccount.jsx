@@ -7,6 +7,7 @@ import { BASE_URL } from '../utils/config';
 import { AuthContext } from '../context/AuthContext';
 import { Image, Transformation } from 'cloudinary-react';
 import { useFetch, authenticatedFetch } from '../utils/api';
+import { getUserId } from '../utils/getUserId';
 
 
 const MyAccount = () => {
@@ -34,7 +35,8 @@ const MyAccount = () => {
       return;
     }
     
-    if (user._id !== id && user.role !== 'admin') {
+    const userId = getUserId(user);
+    if (userId !== id && user.role !== 'admin') {
       navigate('/');
       return;
     }
