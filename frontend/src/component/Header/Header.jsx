@@ -57,8 +57,6 @@ const Header = () => {
 
   const { user, dispatch } = useContext(AuthContext);
   
-  console.log('Header - User from context:', user);
-  
   // Don't show header for admin users
   if (user?.role === 'admin') {
     return null;
@@ -68,9 +66,6 @@ const Header = () => {
   // The user object should already have all the necessary information
   const userinfo = user;
   const userId = getUserId(user);
-  
-  console.log('User ID:', userId);
-  console.log('Has valid user ID:', hasValidUserId(user));
   
   
 

@@ -44,16 +44,11 @@ const Login = () => {
         return toast.error(result.message)
       }
       
-      console.log('Login result:', result);
-      
       const userData = {
         ...result.data,
         role: result.role,
         token: result.token,
       };
-      
-      console.log('User data to store:', userData);
-      console.log('User ID field:', userData._id);
       
       dispatch({type:"LOGIN_SUCCESS",
       payload: {

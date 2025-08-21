@@ -32,7 +32,7 @@ const orderSchema = new mongoose.Schema(
     },
     total:{
         type: Number,
-        requierd:true
+        required:true
     },
     status:{
         type: String,

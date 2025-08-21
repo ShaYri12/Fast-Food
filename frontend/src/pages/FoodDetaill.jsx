@@ -103,10 +103,6 @@ const FoodDetaill = () => {
         return toast.error('Please Sign-In');
       }
   
-      console.log('=== Add to Cart Debug ===');
-      console.log('User info:', userinfo);
-      console.log('User ID from getUserId:', userId);
-      
       const cartItem = {
         userId: userId,
         foodId: id,
@@ -116,20 +112,6 @@ const FoodDetaill = () => {
         photo: food && food.photo,
         category: food && food.category,
       };
-      
-      console.log('Cart item to send:', cartItem);
-      
-      // First test the authentication
-      try {
-        console.log('Testing cart authentication...');
-        const testResult = await authenticatedFetch(`${BASE_URL}/test-cart-auth`, {
-          method: 'POST',
-          body: JSON.stringify(cartItem),
-        });
-        console.log('Auth test result:', testResult);
-      } catch (authError) {
-        console.error('Auth test failed:', authError);
-      }
       
       const result = await authenticatedFetch(`${BASE_URL}/cart/addtocart`, {
         method: 'POST',
