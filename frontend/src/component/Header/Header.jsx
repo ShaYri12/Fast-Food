@@ -89,6 +89,11 @@ const Header = () => {
   
   const { user, dispatch } = useContext(AuthContext);
   
+  // Don't show header for admin users
+  if (user?.role === 'admin') {
+    return null;
+  }
+  
   const { data: userinfo, loading, error } = useFetch(user ? `${BASE_URL}/users/${user._id}` : null);
   
   

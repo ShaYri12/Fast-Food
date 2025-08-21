@@ -14,27 +14,30 @@ import Login from '../pages/Login.jsx';
 
 const AdminRouters = () => {
   const { user } = useContext(AuthContext);
+  
+  // If no user or user is not admin, redirect to login
+  if (!user || user.role !== 'admin') {
+    return (
+      <Routes>
+        <Route path="/login" element={<Login />}/>
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    );
+  }
+  
   return (
     <Routes>
         <Route path="/" element={<Navigate to="/dashboard"/>}/>
         <Route path="/dashboard" element={<Dashboard />}/>
-        <Route path="/login" element={<Login />}/>
         <Route path="/menu" element={<Menu />}/>
         <Route path="/orders" element={<Orders />}/>
         <Route path="/users" element={<Users />}/>
         <Route path="/admins" element={<Admins />}/>
         <Route path="/createfood" element={<CreateFood />}/>
         <Route path="/updatefood/:id" element={<UpdateFood />}/>
-        
-        { /* User Logged In? */ }
-        {user ? (
-          <Route path="/my-account/:id" element={<MyAccount />} />
-        ) : (
-          <Route path="/my-account/:id" element={<Navigate to="/login" />} />
-        )}
+        <Route path="/my-account/:id" element={<MyAccount />} />
         <Route path="*" element={<Navigate to='/dashboard'/>} />
     </Routes>
-
   )
 }
 

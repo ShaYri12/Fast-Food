@@ -58,9 +58,23 @@ const MyAccount = () => {
 
   }
 
-  const {dispatch} = useContext(AuthContext)
+  const {user, dispatch} = useContext(AuthContext)
   const {id} = useParams();
-  const {data: userinfo, loading, error} = useFetch(`${BASE_URL}/users/${id}`);
+  
+  // Check if user is authorized to view this account
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    
+    if (user._id !== id && user.role !== 'admin') {
+      navigate('/');
+      return;
+    }
+  }, [user, id, navigate]);
+  
+  const {data: userinfo, loading, error} = useFetch(user ? `${BASE_URL}/users/${id}` : null);
 
   const [userData, setUserData] = useState({
     username: '',

@@ -26,19 +26,24 @@ const Routers = () => {
         <Route path="/" element={<Home />}/>
         <Route path="/menu" element={<Menu />}/>
         <Route path="/fooddetail/:id" element={<FoodDetaill />}/>
-        <Route path="/my-orders/:id" element={<MyOrders />}/>  
-        <Route path="/cart/:id" element={<Cart />}/>  
         <Route path="/about" element={<About />}/>
         <Route path="/thank-you" element={<ThankYou />}/>
-        <Route path="/login" element={<Login />}/>
-        <Route path="/register" element={<Register />}/>
+        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />}/>
+        <Route path="/register" element={user ? <Navigate to="/" /> : <Register />}/>
 
-        { /* User Logged In? */ }
-        {user ? (
-          <Route path="/my-account/:id" element={<MyAccount />} />
-        ) : (
-          <Route path="/my-account/:id" element={<Navigate to="/login" />} />
-        )}
+        { /* Protected Routes */ }
+        <Route 
+          path="/my-account/:id" 
+          element={user ? <MyAccount /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/cart/:id" 
+          element={user ? <Cart /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/my-orders/:id" 
+          element={user ? <MyOrders /> : <Navigate to="/login" />} 
+        />
         
         <Route path="*" element={<Navigate to='/'/>} />
     </Routes>

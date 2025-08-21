@@ -51,7 +51,13 @@ const Login = () => {
         },
       },})
       toast.success(result.message);
-      navigate("/dashboard");
+      
+      // Navigate based on user role
+      if (result.role === 'admin') {
+        navigate("/dashboard");
+      } else {
+        navigate("/");
+      }
       
     }catch (error){
       dispatch({type:'LOGIN_FAILURE', payload:error.message}) 
