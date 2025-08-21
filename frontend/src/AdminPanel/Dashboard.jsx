@@ -1,49 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import './styles/dashboard.css';
 import { Link } from 'react-router-dom';
 import { BASE_URL } from '../utils/config';
+import { AuthContext } from '../context/AuthContext';
+import { useFetch } from '../utils/api';
 
 const Dashboard = () => {
-
-  const useFetch = (url) => {
-    const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true);
-
-        try {
-          const res = await fetch(url, {
-            method: "GET",
-            credentials:'include',
-          });
-          if (!res.ok) {
-            throw new Error(`Failed to fetch data from ${url}. Status: ${res.status} - ${res.statusText}`);
-          }
-          
-          const result = await res.json();
-          setData(result.data);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchData();
-    }, [url]);
-
-    return { data, loading, error };
-
-  }
+  const { user } = useContext(AuthContext);
   
 
+  // Test admin authentication first
+  const { data: authTest, loading: loadingAuth, error: errorAuth } = useFetch(`${BASE_URL}/test-admin`);
+  
   const { data: users, loading: loadingUsers, error: errorUsers } = useFetch(`${BASE_URL}/users`);
   const { data: admins, loading: loadingAdmins, error: errorAdmins } = useFetch(`${BASE_URL}/users/search/admins`);
   const { data: orders, loading: loadingOrders, error: errorOrders } = useFetch(`${BASE_URL}/order`);
   const { data: foods, loading: loadingFoods, error: errorFoods } = useFetch(`${BASE_URL}/menus/search/getMenuCount`);
+
+  console.log('Auth test result:', authTest, errorAuth);
 
 
   return (

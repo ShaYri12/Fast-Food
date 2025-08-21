@@ -6,6 +6,7 @@ import './header.css'
 import { AuthContext } from '../../context/AuthContext'
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../utils/config'
+import { useFetch } from '../../utils/api'
 
 const Header = () => {
   useEffect(() => {
@@ -53,40 +54,6 @@ const Header = () => {
   const navigate = useNavigate();
   
 
-  const useFetch = (url) => {
-    const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true);
-
-        try {
-          const res = await fetch(url, {
-            method: "GET",
-            credentials:'include',
-          });
-          if (!res.ok) {
-            throw new Error(`Failed to fetch data from ${url}. Status: ${res.status} - ${res.statusText}`);
-          }
-          
-          const result = await res.json();
-          setData(result.data);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchData();
-    }, [url]);
-
-    return { data, loading, error };
-
-  }
-  
   const { user, dispatch } = useContext(AuthContext);
   
   // Don't show header for admin users

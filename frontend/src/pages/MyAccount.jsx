@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { BASE_URL } from '../utils/config';
 import { AuthContext } from '../context/AuthContext';
 import { Image, Transformation } from 'cloudinary-react';
+import { useFetch, authenticatedFetch } from '../utils/api';
 
 
 const MyAccount = () => {
@@ -22,41 +23,6 @@ const MyAccount = () => {
   
   
   const navigate = useNavigate();
-
-  const useFetch = (url) => {
-    const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true);
-
-        try {
-          const res = await fetch(url, {
-            method: "GET",
-            credentials:'include',
-          });
-          if (!res.ok) {
-            throw new Error(`Failed to fetch data from ${url}. Status: ${res.status} - ${res.statusText}`);
-          }
-          
-          const result = await res.json();
-          setData(result.data);
-
-
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchData();
-    }, [url]);
-
-    return { data, loading, error };
-
-  }
 
   const {user, dispatch} = useContext(AuthContext)
   const {id} = useParams();
@@ -106,54 +72,35 @@ const MyAccount = () => {
     e.preventDefault();
     if (password.oldPassword && password.newPassword && password.confirmPassword) {
       try{
-      const response = await fetch(`${BASE_URL}/users/${id}/password`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(password),
-      });
+        const result = await authenticatedFetch(`${BASE_URL}/users/${id}/password`, {
+          method: 'PUT',
+          body: JSON.stringify(password),
+        });
 
-      const { message } = await response.json();
-
-      if (!response.ok) {
-        toast.error(message);
-        return;
+        toast.success(result.message);
+        dispatch({ type: "LOGOUT" });
+        navigate('/login')
+      }catch(err){
+        console.log(err)
+        toast.error(err.message || "Internal Server Error.")
       }
-      toast.success(message);
-      dispatch({ type: "LOGOUT" });
-      navigate('/login')
-    }catch(err){
-      console.log(err)
-      toast.error("Internal Sever Error.")
-    }
     }
     else{
-    toast.error("All fields are required.")
+      toast.error("All fields are required.")
+    }
   }
-}
 
   const deleteAccount = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/users/${id}`, {
+      const result = await authenticatedFetch(`${BASE_URL}/users/${id}`, {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        credentials: 'include',
       });
-      const { message } = await response.json();
 
-      if (!response.ok) {
-        toast.error(message);
-      } else {
-        dispatch({ type: "LOGOUT" });
-        toast.info(message);
-        navigate("/register");
-      }
+      dispatch({ type: "LOGOUT" });
+      toast.info(result.message);
+      navigate("/register");
     } catch (err) {
-      toast.error("Server not responding");
+      toast.error(err.message || "Server not responding");
     }
   };
 
@@ -182,21 +129,10 @@ const MyAccount = () => {
         userData.photo = cloudinaryData.secure_url;
       }
 
-      const response = await fetch(`${BASE_URL}/users/${id}`, {
+      const result = await authenticatedFetch(`${BASE_URL}/users/${id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: 'include',
         body: JSON.stringify(userData),
       });
-  
-      const { message } = await response.json();
-  
-      if (!response.ok) {
-        toast.error(message);
-        return;
-      }
   
       setEditMode(false);
       toast.success("Profile updated successfully.");

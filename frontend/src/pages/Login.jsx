@@ -48,6 +48,7 @@ const Login = () => {
         user: {
           ...result.data,
           role: result.role,
+          token: result.token,
         },
       },})
       toast.success(result.message);

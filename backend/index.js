@@ -100,6 +100,26 @@ app.get('/test-db', async (req, res) => {
     }
 });
 
+// Test admin authentication
+app.get('/test-admin', async (req, res, next) => {
+    try {
+        const { verifyAdmin } = await import('./utils/verifyToken.js');
+        verifyAdmin(req, res, () => {
+            res.json({
+                success: true,
+                message: 'Admin authentication successful',
+                user: req.user
+            });
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Test failed',
+            error: error.message
+        });
+    }
+});
+
 //Routes
 app.use('/api/auth', authRoute);
 app.use('/api/menus', menuRoute);
