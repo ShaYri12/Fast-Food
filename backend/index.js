@@ -1,8 +1,8 @@
 import express from "express"
 import dotenv from "dotenv"
+import mongoose from "mongoose"
 import cors from 'cors'
 import cookieParser from "cookie-parser"
-import { connectDB } from './utils/database.js'
 import menuRoute from './routes/menus.js'
 import userRoute from './routes/users.js'
 import authRoute from './routes/auth.js'
@@ -12,74 +12,54 @@ import cartRoute from './routes/cart.js'
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT || 8000
-const corsOption = {
-    origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
+
+// Database connection
+let isConnected = false;
+
+const connectDB = async () => {
+    if (isConnected) {
+        console.log('Using existing database connection');
+        return;
+    }
+
+    try {
+        mongoose.set('strictQuery', false);
         
-        const allowedOrigins = process.env.NODE_ENV === 'production' 
-            ? [
-                'https://fast-food-gamma.vercel.app',
-                'https://fast-food-server-nine.vercel.app',
-                /\.vercel\.app$/,
-                /localhost/
-              ] 
-            : [
-                'http://localhost:3000', 
-                'http://localhost:5173', 
-                'http://127.0.0.1:5173',
-                'http://localhost:8000'
-              ];
-        
-        const isAllowed = allowedOrigins.some(allowedOrigin => {
-            if (typeof allowedOrigin === 'string') {
-                return origin === allowedOrigin;
-            }
-            if (allowedOrigin instanceof RegExp) {
-                return allowedOrigin.test(origin);
-            }
-            return false;
+        const db = await mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            maxPoolSize: 10,
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000,
+            bufferCommands: false,
+            bufferMaxEntries: 0,
         });
+
+        isConnected = db.connections[0].readyState === 1;
+        console.log('MongoDB connected successfully');
         
-        if (isAllowed) {
-            callback(null, true);
-        } else {
-            console.log('CORS blocked origin:', origin);
-            callback(null, true); // Allow all origins for now to debug
-        }
-    },
+    } catch (error) {
+        console.error('Database connection failed:', error);
+        throw error;
+    }
+};
+
+// CORS configuration
+const corsOption = {
+    origin: true, // Allow all origins for now to debug
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'X-Requested-With'],
     optionsSuccessStatus: 200
 };
 
-//testing
-app.get('/', async (req, res) => {
-    try {
-        await connectDB();
-        res.json({ 
-            success: true, 
-            message: "API is working",
-            timestamp: new Date().toISOString()
-        });
-    } catch (error) {
-        res.status(500).json({ 
-            success: false, 
-            message: "Database connection failed",
-            error: error.message 
-        });
-    }
-})
-
 //middleware
 app.use(express.json({ limit: "3mb" }));
-app.use(cors(corsOption))
-app.use(cookieParser())
+app.use(cors(corsOption));
+app.use(cookieParser());
 
-// Database connection middleware for all API routes
-app.use('/api', async (req, res, next) => {
+// Connect to database before handling requests
+app.use(async (req, res, next) => {
     try {
         await connectDB();
         next();
@@ -93,17 +73,46 @@ app.use('/api', async (req, res, next) => {
     }
 });
 
+//testing route
+app.get('/', (req, res) => {
+    res.json({ 
+        success: true, 
+        message: "API is working",
+        timestamp: new Date().toISOString(),
+        env: process.env.NODE_ENV
+    });
+});
+
+// Test database connection
+app.get('/test-db', async (req, res) => {
+    try {
+        const Menu = (await import('./models/Menu.js')).default;
+        const count = await Menu.countDocuments();
+        res.json({
+            success: true,
+            message: 'Database connection successful',
+            menuCount: count
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Database connection failed',
+            error: error.message
+        });
+    }
+});
+
 //Routes
-app.use('/api/auth', authRoute)
-app.use('/api/menus', menuRoute)
-app.use('/api/users', userRoute)
-app.use('/api/review', reviewRoute)
-app.use('/api/order', orderRoute)
-app.use('/api/cart', cartRoute)
+app.use('/api/auth', authRoute);
+app.use('/api/menus', menuRoute);
+app.use('/api/users', userRoute);
+app.use('/api/review', reviewRoute);
+app.use('/api/order', orderRoute);
+app.use('/api/cart', cartRoute);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
+    console.error('Error:', err);
     res.status(500).json({
         success: false,
         message: 'Something went wrong!',
@@ -119,18 +128,14 @@ app.use('*', (req, res) => {
     });
 });
 
-// For serverless deployment (Vercel), we don't need app.listen
-// For local development, we can still use it
+const port = process.env.PORT || 8000;
+
+// For local development
 if (process.env.NODE_ENV !== 'production') {
-    app.listen(port, async () => {
-        try {
-            await connectDB();
-            console.log(`Server listening on port: ${port}`);
-        } catch (error) {
-            console.error('Failed to start server:', error);
-        }
+    app.listen(port, () => {
+        console.log(`Server listening on port: ${port}`);
     });
 }
 
-// Export the app for serverless deployment
+// Export for Vercel
 export default app;

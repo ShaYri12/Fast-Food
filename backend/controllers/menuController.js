@@ -1,5 +1,4 @@
 import Menu from '../models/Menu.js'
-import { connectDB } from '../utils/database.js'
 
 //create new Menu
 export const createMenu = async (req, res) =>{
@@ -157,7 +156,9 @@ export const getMenuBySearch = async (req, res) => {
 //get Special Ones
 export const getSpecialOnes = async(req, res) =>{
     try{
-        const menus = await Menu.find({special:true}).limit(8).populate("reviews")
+        console.log('getSpecialOnes called');
+        const menus = await Menu.find({special:true}).limit(8).populate("reviews");
+        console.log('Found special menus:', menus.length);
 
         res.status(200).json({
             success: true,
@@ -166,9 +167,11 @@ export const getSpecialOnes = async(req, res) =>{
         });
     }
     catch(err){
-        res.status(404).json({
+        console.error('getSpecialOnes error:', err);
+        res.status(500).json({
             success: false,
-            message: "Not found",
+            message: "Error fetching special menus",
+            error: err.message
         });
     }
 }

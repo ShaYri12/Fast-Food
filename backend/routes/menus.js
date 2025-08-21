@@ -16,6 +16,25 @@ router.get("/search/getSpecialOnes", getSpecialOnes);
 //get menu count (must come before /:id)
 router.get("/search/getMenuCount", getMenuCount);
 
+// Test route to check if menu routes work
+router.get("/test", async (req, res) => {
+    try {
+        const Menu = (await import('../models/Menu.js')).default;
+        const count = await Menu.countDocuments();
+        res.json({
+            success: true,
+            message: 'Menu routes working',
+            totalMenus: count
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Menu routes error',
+            error: error.message
+        });
+    }
+});
+
 //update
 router.put("/:id", verifyAdmin, updateMenu);
 

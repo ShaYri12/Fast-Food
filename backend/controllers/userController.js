@@ -68,9 +68,10 @@ export const getSingleUser = async(req, res) =>{
 
 //get all Users
 export const getAllUser = async(req, res) =>{
-
     try{
-        const users = await User.find({role:'user'})
+        console.log('getAllUser called');
+        const users = await User.find({role:'user'});
+        console.log('Found users:', users.length);
 
         res.status(200).json({
             success: true,
@@ -80,9 +81,11 @@ export const getAllUser = async(req, res) =>{
         });
     }
     catch(err){
-        res.status(404).json({
+        console.error('getAllUser error:', err);
+        res.status(500).json({
             success: false,
-            message: "Not found",
+            message: "Error fetching users",
+            error: err.message
         });
     }
 }
