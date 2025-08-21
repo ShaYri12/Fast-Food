@@ -5,8 +5,8 @@ import { AuthContext } from '../context/AuthContext';
 import {BASE_URL} from './../utils/config'
 import { toast } from 'react-toastify';
 
-import RegisterImg from '../assets/images/register.png'
-import userIcon from '../assets/images/user.png'
+import RegisterImg from '/images/register.png'
+import userIcon from '/images/user.png'
 
 const Register = () => {
   useEffect(() => {

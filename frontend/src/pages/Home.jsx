@@ -6,8 +6,8 @@ import CompanyStats from '../shared/CompanyStats'
 import Faq from './Faq'
 import category from '../assets/Data/category.js'
 
-import heroImg from '../assets/images/hero-img.png'
-import heroObj from '../assets/images/hero-obj.png'
+import heroImg from '/images/hero-img.png'
+import heroObj from '/images/hero-obj.png'
 
 
 

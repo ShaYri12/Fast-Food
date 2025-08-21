@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { Link } from "react-router-dom";
 import './footer.css';
 import { AuthContext } from '../../context/AuthContext'
-import logo from '../../assets/images/logo.png'
+import logo from '/images/logo.png'
 
 const Footer = () => {
   const year = new Date().getFullYear();

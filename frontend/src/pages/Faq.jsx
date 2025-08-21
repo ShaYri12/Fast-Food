@@ -1,6 +1,6 @@
 import React from 'react'
 import '../styles/faq.css'
-import faq from '../assets/images/faq.png'
+import faq from '/images/faq.png'
 
 const Faq = () => {
   return (

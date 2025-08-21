@@ -4,10 +4,10 @@ import { BASE_URL } from '../utils/config';
 import '../styles/cart.css'
 import CartItem from '../shared/CartItem';
 
-import mastercard from '../assets/images/mastercard.png'
-import paypal from '../assets/images/paypal.png'
-import cashondelivery from '../assets/images/cashondelivery.png'
-import jazzcash from '../assets/images/jazzcash.png'
+import mastercard from '/images/mastercard.png'
+import paypal from '/images/paypal.png'
+import cashondelivery from '/images/cashondelivery.png'
+import jazzcash from '/images/jazzcash.png'
 import { toast } from 'react-toastify';
 
 const Cart = () => {

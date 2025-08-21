@@ -6,7 +6,7 @@ import useFetch from '../hooks/useFetch';
 import { BASE_URL } from '../utils/config';
 import { AuthContext } from '../context/AuthContext';
 
-import Avatar from '../assets/images/avatar.jpg'
+import Avatar from '/images/avatar.jpg'
 import { toast } from 'react-toastify';
 import Spinner from '../component/Spinner';
 

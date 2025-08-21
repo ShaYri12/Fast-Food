@@ -5,8 +5,8 @@ import { AuthContext } from '../context/AuthContext';
 import {BASE_URL} from './../utils/config'
 import { toast } from 'react-toastify';
 
-import LoginImg from '../assets/images/login.png'
-import userIcon from '../assets/images/user.png'
+import LoginImg from '/images/login.png'
+import userIcon from '/images/user.png'
 
 const Login = () => {
   useEffect(() => {

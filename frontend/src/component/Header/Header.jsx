@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import Logo from '../../assets/images/logo.png'
-import Avatar from '../../assets/images/avatar.jpg';
+import Logo from '/images/logo.png'
+import Avatar from '/images/avatar.jpg';
 import './header.css'
 import { AuthContext } from '../../context/AuthContext'
 import { toast } from 'react-toastify';

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { BASE_URL } from '../utils/config';
-import Avatar from '../assets/images/avatar.jpg';
+import Avatar from '/images/avatar.jpg';
 import updateData from '../hooks/useUpdate'
 import deleteData from '../hooks/useDelete'
 
