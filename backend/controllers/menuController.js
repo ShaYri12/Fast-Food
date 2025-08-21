@@ -84,35 +84,41 @@ export const getSingleMenu = async(req, res) =>{
 
 /// get all Menus or by category with search
 export const getAllMenu = async (req, res) => {
-    const page = parseInt(req.query.page) || 0; // Set default value for page
     try {
+        const page = parseInt(req.query.page) || 0;
         const { category, search } = req.query;
         let query = {};
 
-        // Check if category is provided in the query parameters
-        if (category) {
+        // Check if category is provided and not empty
+        if (category && category.trim() !== '') {
             query.category = { $regex: new RegExp(category, 'i') };
         }
 
-        // Check if search is provided in the query parameters
-        if (search) {
+        // Check if search is provided and not empty
+        if (search && search.trim() !== '') {
             query.$or = [
                 { title: { $regex: new RegExp(search, 'i') } },
                 { desc: { $regex: new RegExp(search, 'i') } },
             ];
         }
 
-        // Use the query directly instead of { query }
+        console.log('Query:', query, 'Page:', page);
+
         const menus = await Menu.find(query).populate('reviews').skip(page * 8).limit(8);
 
-        if (menus.length === 0) {
-            return res.status(404).json({ message: 'No data found for the given category and search' });
-        }
-
-        res.status(200).json({ data: menus, message: 'Data Received' });
+        res.status(200).json({ 
+            success: true,
+            data: menus, 
+            message: 'Data retrieved successfully',
+            count: menus.length 
+        });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal Server Error from getAllMenu' });
+        console.error('getAllMenu error:', error);
+        res.status(500).json({ 
+            success: false,
+            message: 'Internal Server Error from getAllMenu',
+            error: error.message 
+        });
     }
 };
 
@@ -170,35 +176,36 @@ export const getSpecialOnes = async(req, res) =>{
 export const getMenuCount = async (req, res) => {
     try {
         const { category, search } = req.query;
-      // Define the filter object
-      const filter = {};
+        const filter = {};
   
-      // Check if category is provided in the query parameters
-      if (category) {
-        filter.category = { $regex: new RegExp(category, 'i') };
-      }
+        // Check if category is provided and not empty
+        if (category && category.trim() !== '') {
+            filter.category = { $regex: new RegExp(category, 'i') };
+        }
   
-      // Check if search is provided in the query parameters
-      if (search) {
-        filter.$or = [
-          { title: { $regex: new RegExp(search, 'i') } },
-          { desc: { $regex: new RegExp(search, 'i') } },
-        ];
-      }
+        // Check if search is provided and not empty
+        if (search && search.trim() !== '') {
+            filter.$or = [
+                { title: { $regex: new RegExp(search, 'i') } },
+                { desc: { $regex: new RegExp(search, 'i') } },
+            ];
+        }
+
+        console.log('getMenuCount filter:', filter);
   
-      // Use the filter to count documents in the Menu collection
-      const menuCount = await Menu.countDocuments(filter);
+        const menuCount = await Menu.countDocuments(filter);
   
-      // Respond with the count
-      res.status(200).json({
-        success: true,
-        data: menuCount,
-      });
+        res.status(200).json({
+            success: true,
+            data: menuCount,
+            message: 'Menu count retrieved successfully'
+        });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        success: false,
-        message: 'Failed to fetch menu count',
-      });
+        console.error('getMenuCount error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch menu count',
+            error: error.message
+        });
     }
-  };
+};

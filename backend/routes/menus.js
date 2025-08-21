@@ -7,6 +7,15 @@ const router = express.Router();
 //create new Menu
 router.post("/", verifyAdmin, createMenu);
 
+//get Menu by search (must come before /:id)
+router.get("/search/getMenuBySearch", getMenuBySearch);
+
+//get featured Menu (must come before /:id)
+router.get("/search/getSpecialOnes", getSpecialOnes);
+
+//get menu count (must come before /:id)
+router.get("/search/getMenuCount", getMenuCount);
+
 //update
 router.put("/:id", verifyAdmin, updateMenu);
 
@@ -18,13 +27,5 @@ router.get("/:id", getSingleMenu);
 
 //get all Menus or by category and search
 router.get("/", getAllMenu);
-
-//get Menu by search
-router.get("/search/getMenuBySearch", getMenuBySearch);
-
-//get featured Menu
-router.get("/search/getSpecialOnes", getSpecialOnes);
-
-router.get("/search/getMenuCount", getMenuCount);
 
 export default router;

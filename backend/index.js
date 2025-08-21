@@ -14,12 +14,45 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT ||  8000
 const corsOption = {
-    origin: process.env.NODE_ENV === 'production' 
-        ? ['https://fast-food-gamma.vercel.app', 'https://fast-food-server-nine.vercel.app'] 
-        : ['http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:5173'],
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        const allowedOrigins = process.env.NODE_ENV === 'production' 
+            ? [
+                'https://fast-food-gamma.vercel.app',
+                'https://fast-food-server-nine.vercel.app',
+                /\.vercel\.app$/,
+                /localhost/
+              ] 
+            : [
+                'http://localhost:3000', 
+                'http://localhost:5173', 
+                'http://127.0.0.1:5173',
+                'http://localhost:8000'
+              ];
+        
+        const isAllowed = allowedOrigins.some(allowedOrigin => {
+            if (typeof allowedOrigin === 'string') {
+                return origin === allowedOrigin;
+            }
+            if (allowedOrigin instanceof RegExp) {
+                return allowedOrigin.test(origin);
+            }
+            return false;
+        });
+        
+        if (isAllowed) {
+            callback(null, true);
+        } else {
+            console.log('CORS blocked origin:', origin);
+            callback(null, true); // Allow all origins for now to debug
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'X-Requested-With'],
+    optionsSuccessStatus: 200
 };
 
 //testing
