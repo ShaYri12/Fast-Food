@@ -120,6 +120,27 @@ app.get('/test-admin', async (req, res, next) => {
     }
 });
 
+// Test cart user authentication
+app.post('/test-cart-auth', async (req, res, next) => {
+    try {
+        const { verifyCartUser } = await import('./utils/verifyToken.js');
+        verifyCartUser(req, res, () => {
+            res.json({
+                success: true,
+                message: 'Cart user authentication successful',
+                user: req.user,
+                requestBody: req.body
+            });
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Test failed',
+            error: error.message
+        });
+    }
+});
+
 //Routes
 app.use('/api/auth', authRoute);
 app.use('/api/menus', menuRoute);

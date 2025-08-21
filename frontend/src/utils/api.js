@@ -6,6 +6,11 @@ export const authenticatedFetch = async (url, options = {}) => {
   const userStr = localStorage.getItem('user');
   const user = userStr && userStr !== "undefined" ? JSON.parse(userStr) : null;
   
+  console.log('=== Frontend Auth Debug ===');
+  console.log('User from localStorage:', user);
+  console.log('User has token:', user && user.token ? 'Yes' : 'No');
+  console.log('Token (first 20 chars):', user && user.token ? user.token.substring(0, 20) + '...' : 'None');
+  
   const defaultHeaders = {
     'Content-Type': 'application/json',
   };
@@ -23,6 +28,10 @@ export const authenticatedFetch = async (url, options = {}) => {
     },
     ...options,
   };
+  
+  console.log('Request URL:', url);
+  console.log('Request headers:', config.headers);
+  console.log('Request body:', options.body);
   
   const response = await fetch(url, config);
   

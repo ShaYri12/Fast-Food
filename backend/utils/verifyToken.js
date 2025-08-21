@@ -1,6 +1,10 @@
 import jwt from 'jsonwebtoken'
 
 const verifyToken = (req, res, next)=>{
+    console.log('=== Token Verification Debug ===');
+    console.log('Cookies:', req.cookies);
+    console.log('Authorization header:', req.headers.authorization);
+    
     // Try to get token from cookies first, then from Authorization header
     let token = req.cookies?.accessToken;
     
@@ -11,7 +15,11 @@ const verifyToken = (req, res, next)=>{
         }
     }
 
+    console.log('Token found:', token ? 'Yes' : 'No');
+    console.log('Token (first 20 chars):', token ? token.substring(0, 20) + '...' : 'None');
+
     if(!token){
+        console.log('No token found, returning 401');
         return res.status(401).json({
             success: false,
             message: "Access token not found. You're not authorized"
@@ -27,6 +35,7 @@ const verifyToken = (req, res, next)=>{
             })
         }
 
+        console.log('Token verified successfully for user:', user);
         req.user = user;
         next();
     })
