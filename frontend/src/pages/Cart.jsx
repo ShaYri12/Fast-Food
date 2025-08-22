@@ -54,8 +54,19 @@ const Cart = () => {
     }
   };
 
-  // Function called when quantity changes to refetch cart data
-  const quantityChanges = () => {
+  // Function called when quantity changes - update local state instead of refetching
+  const quantityChanges = (cartItemId, newQuantity) => {
+    setUserCart(prevCart => 
+      prevCart.map(item => 
+        item._id === cartItemId 
+          ? { ...item, quantity: newQuantity }
+          : item
+      )
+    );
+  };
+
+  // Function to refetch cart data (for when we need to sync with server)
+  const refetchCartData = () => {
     fetchCartData();
   };
 
@@ -102,7 +113,7 @@ const Cart = () => {
     const totalAmount = total;
   
     try {
-      const orderResult = await authenticatedFetch(`${BASE_URL}/order`, {
+      const orderResult = await authenticatedFetch(`${BASE_URL}/order/${userId}`, {
         method: 'POST',
         body: JSON.stringify({ userId, items, address, totalAmount }),
       });

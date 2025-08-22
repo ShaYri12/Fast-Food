@@ -33,7 +33,7 @@ const CartItem = ({cart, quantityChanges}) => {
         });
 
         setNewQuantity(updatedQuantity);
-        quantityChanges();
+        quantityChanges(_id, updatedQuantity);
       } catch (err) {
         toast.error('Error during updating the quantity');
         console.log(err);
@@ -57,7 +57,7 @@ const CartItem = ({cart, quantityChanges}) => {
               body: JSON.stringify(cartItem),
             });
             
-            quantityChanges();
+            quantityChanges(_id, enteredValue);
           } else {
             // If the entered value is not a positive number, reset to 1
             setNewQuantity(1);

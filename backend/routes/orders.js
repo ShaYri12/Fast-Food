@@ -5,7 +5,7 @@ import { verifyAdmin, verifyUser } from '../utils/verifyToken.js';
 const router = express.Router();
 
 //create Order
-router.post("/", verifyUser, createOrder);
+router.post("/:id", verifyUser, createOrder);
 
 //get single Order
 router.get("/:id", verifyUser, getOrder);
