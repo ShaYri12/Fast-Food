@@ -113,17 +113,26 @@ const Cart = () => {
     const totalAmount = total;
   
     try {
+      // Create the order first
       const orderResult = await authenticatedFetch(`${BASE_URL}/order/${userId}`, {
         method: 'POST',
         body: JSON.stringify({ userId, items, address, totalAmount }),
       });
 
-      console.log(orderResult);
+      console.log('Order created successfully:', orderResult);
 
-      const cartResult = await authenticatedFetch(`${BASE_URL}/cart/${id}`, {
+      // Clear the cart on the server
+      await authenticatedFetch(`${BASE_URL}/cart/${id}`, {
         method: 'DELETE',
       });
 
+      // Clear the cart in local state immediately
+      setUserCart([]);
+      setSubtotal(0);
+      setTotal(deleverycharges);
+      setLocation('');
+
+      toast.success('Order placed successfully!');
       Navigate('/thank-you');
     } catch (error) {
       console.error('Error creating order:', error);

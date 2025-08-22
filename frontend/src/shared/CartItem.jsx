@@ -9,63 +9,81 @@ const CartItem = ({cart, quantityChanges}) => {
     const [newQuantity, setNewQuantity] = useState(quantity);
     const deleveryCharges = 100;
 
-    const handleQuantityChange = async (action) => {
-      try {
-        let updatedQuantity;
-  
-        if (action === 'increase') {
-          updatedQuantity = newQuantity + 1;
-        } else if (action === 'decrease' && newQuantity > 1) {
-          updatedQuantity = newQuantity - 1;
-        } else {
-          return;
-        }
-  
-        const cartItem = {
-          userId: userId,
-          foodId: foodId,
-          quantity: updatedQuantity,
-        };
-  
-        const result = await authenticatedFetch(`${BASE_URL}/cart/quantity`, {
-          method: 'PUT',
-          body: JSON.stringify(cartItem),
-        });
+    const handleQuantityChange = (action) => {
+      let updatedQuantity;
 
-        setNewQuantity(updatedQuantity);
-        quantityChanges(_id, updatedQuantity);
-      } catch (err) {
-        toast.error('Error during updating the quantity');
-        console.log(err);
+      if (action === 'increase') {
+        updatedQuantity = newQuantity + 1;
+      } else if (action === 'decrease' && newQuantity > 1) {
+        updatedQuantity = newQuantity - 1;
+      } else {
+        return;
       }
+
+      // Update UI immediately for fast response
+      setNewQuantity(updatedQuantity);
+      quantityChanges(_id, updatedQuantity);
+
+      // Update server asynchronously in the background
+      const updateServer = async () => {
+        try {
+          const cartItem = {
+            userId: userId,
+            foodId: foodId,
+            quantity: updatedQuantity,
+          };
+
+          await authenticatedFetch(`${BASE_URL}/cart/quantity`, {
+            method: 'PUT',
+            body: JSON.stringify(cartItem),
+          });
+        } catch (err) {
+          // If server update fails, revert the UI changes
+          setNewQuantity(newQuantity);
+          quantityChanges(_id, newQuantity);
+          toast.error('Error updating quantity. Please try again.');
+          console.error('Quantity update error:', err);
+        }
+      };
+
+      updateServer();
     };
   
-      const handleManualQuantityChange = async (e) => {
-        try {
-          const enteredValue = parseInt(e.target.value, 10);
-          if (!isNaN(enteredValue) && enteredValue > 0) {
-            setNewQuantity(enteredValue);
-      
-            const cartItem = {
-              userId: userId,
-              foodId: foodId,
-              quantity: enteredValue,
-            };
-      
-            const result = await authenticatedFetch(`${BASE_URL}/cart/quantity`, {
-              method: 'PUT',
-              body: JSON.stringify(cartItem),
-            });
-            
-            quantityChanges(_id, enteredValue);
-          } else {
-            // If the entered value is not a positive number, reset to 1
-            setNewQuantity(1);
-            
-          }
-        } catch (err) {
-          toast.error('Error during updating the quantity');
-          console.log(err);
+      const handleManualQuantityChange = (e) => {
+        const enteredValue = parseInt(e.target.value, 10);
+        
+        if (!isNaN(enteredValue) && enteredValue > 0) {
+          // Update UI immediately
+          setNewQuantity(enteredValue);
+          quantityChanges(_id, enteredValue);
+
+          // Update server asynchronously
+          const updateServer = async () => {
+            try {
+              const cartItem = {
+                userId: userId,
+                foodId: foodId,
+                quantity: enteredValue,
+              };
+
+              await authenticatedFetch(`${BASE_URL}/cart/quantity`, {
+                method: 'PUT',
+                body: JSON.stringify(cartItem),
+              });
+            } catch (err) {
+              // If server update fails, revert to original quantity
+              setNewQuantity(quantity);
+              quantityChanges(_id, quantity);
+              toast.error('Error updating quantity. Please try again.');
+              console.error('Manual quantity update error:', err);
+            }
+          };
+
+          updateServer();
+        } else {
+          // If the entered value is not a positive number, reset to original quantity
+          setNewQuantity(quantity);
+          quantityChanges(_id, quantity);
         }
       };
             
