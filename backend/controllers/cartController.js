@@ -140,8 +140,8 @@ export const updateQuantity = async (req, res) => {
 // Delete all Carts by user ID
 export const deleteCart = async (req, res) => {
   try {
-    const _id = req.params.id;
-    const deletedCarts = await Cart.findOneAndDelete(_id);
+    const userId = req.params.id;
+    const deletedCarts = await Cart.deleteMany({ userId: userId });
 
     if (deletedCarts.deletedCount === 0) {
       return res.status(404).json({
@@ -152,7 +152,8 @@ export const deleteCart = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'All cart items removed successfully',
+      message: `Successfully removed ${deletedCarts.deletedCount} cart items`,
+      deletedCount: deletedCarts.deletedCount,
     });
   } catch (error) {
     console.error(error);
