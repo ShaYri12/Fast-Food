@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { BASE_URL } from '../utils/config';
 import '../styles/cart.css'
 import CartItem from '../shared/CartItem';
-import { useFetch as useAuthenticatedFetch, authenticatedFetch } from '../utils/api';
+import { authenticatedFetch } from '../utils/api';
 
 import mastercard from '/images/mastercard.png'
 import paypal from '/images/paypal.png'
@@ -18,83 +18,53 @@ const Cart = () => {
 
   const { id } = useParams();
 
-  const useInitialFetch = (url) => {
-    const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true);
-
-        try {
-          const res = await fetch(url, {
-            method: 'GET',
-            credentials: 'include',
-          });
-
-          if (!res.ok) {
-            throw new Error(
-              `Failed to fetch data from ${url}. Status: ${res.status} - ${res.statusText}`
-            );
-          }
-
-          const result = await res.json();
-          setData(result.data);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchData();
-    }, [url]);
-
-    return { data, loading, error };
-  };
-
-  // Use authenticated fetch for cart data
-  const { data: userCart, loading: cartLoading, error: cartError } = useAuthenticatedFetch(`${BASE_URL}/cart/${id}`);
-  const { data: userCartTotal, loading: totalLoading, error: totalError } = useAuthenticatedFetch(`${BASE_URL}/cart/${id}`);
-
-  
+  const [userCart, setUserCart] = useState([]);
+  const [cartLoading, setCartLoading] = useState(false);
+  const [cartError, setCartError] = useState(null);
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
   const [location, setLocation] = useState('');
+  const [addressError, setAddressError] = useState('');
   const Navigate = useNavigate();
 
   const handleChange = (e) => {
     setLocation(e.target.value);
+    // Clear address error when user starts typing
+    if (addressError) {
+      setAddressError('');
+    }
   };
 
   const deleverycharges = 100;
 
-  const quantityChanges = () => {
-    if (userCartTotal.length !== 0 && !totalLoading && !totalError) {
-      // Calculate subtotal
-      const calculatedSubtotal = userCartTotal.reduce(
-        (sum, cartItem) => sum + cartItem.price * cartItem.quantity,
-        0
-      );
-      setSubtotal(calculatedSubtotal);
-  
-      // Calculate total
-      const calculatedTotal = calculatedSubtotal + deleverycharges;
-      setTotal(calculatedTotal);
-  
-      // Trigger the refetch of userCart
+  // Function to fetch cart data
+  const fetchCartData = async () => {
+    setCartLoading(true);
+    setCartError(null);
+    
+    try {
+      const result = await authenticatedFetch(`${BASE_URL}/cart/${id}`);
+      setUserCart(result.data || []);
+    } catch (err) {
+      console.error('Cart fetch error:', err);
+      setCartError(err.message);
       setUserCart([]);
+    } finally {
+      setCartLoading(false);
     }
   };
-  
 
+  // Function called when quantity changes to refetch cart data
+  const quantityChanges = () => {
+    fetchCartData();
+  };
+
+  // Initial cart data fetch
   useEffect(() => {
-    // Trigger the refetch of userCart when quantity changes
-    quantityChanges();
-  }, []); // Remov
+    fetchCartData();
+  }, [id]);
 
-
+  // Calculate totals when cart data changes
   useEffect(() => {
     if (userCart.length !== 0 && !cartLoading && !cartError) {
       // Calculate subtotal
@@ -107,21 +77,28 @@ const Cart = () => {
       // Calculate total
       const calculatedTotal = calculatedSubtotal + deleverycharges;
       setTotal(calculatedTotal);
+    } else {
+      setSubtotal(0);
+      setTotal(deleverycharges);
     }
   }, [userCart, cartLoading, cartError]);
     
   const handleOrder = async(e)=>{
     e.preventDefault();
-    if (!location) {
-      return false;
+    
+    // Validate address
+    if (!location || location.trim() === '') {
+      setAddressError('Please enter your delivery address');
+      return;
     }
+    
     const userId= id;
     const items = userCart?.map((item) => ({
       foodId: item.foodId,
       name: item.foodName,
       qty: item.quantity,
     }));
-    const address = location;
+    const address = location.trim();
     const totalAmount = total;
   
     try {
@@ -212,7 +189,20 @@ return (
             <form>
             <div className='address-field form-group mb-3'> 
               <h6>Address:</h6>
-              <textarea className='address-input' type="text" placeholder='Address'  id="location" onChange={handleChange} required/>
+              <textarea 
+                className={`address-input ${addressError ? 'border-danger' : ''}`} 
+                type="text" 
+                placeholder='Address'  
+                id="location" 
+                value={location}
+                onChange={handleChange} 
+                required
+              />
+              {addressError && (
+                <div className="text-danger mt-1 small">
+                  {addressError}
+                </div>
+              )}
             </div>
             <hr/>
             <div className='total'>
